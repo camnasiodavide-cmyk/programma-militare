@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programma Militare — Guida Interattiva</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow:wght@300;400;600;700&display=swap');
+
+:root {
+  --olive: #3d4220;
+  --olive2: #4a4e2c;
+  --khaki: #8b7d5a;
+  --sand: #c9b99a;
+  --cream: #f0e8d6;
+  --dark: #151710;
+  --accent: #c8401a;
+  --green: #4a7c3f;
+  --stripe: rgba(74,78,44,0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--dark);
+  font-family: 'Barlow', sans-serif;
+  color: var(--cream);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+.nav {
+  background: var(--olive);
+  border-bottom: 2px solid var(--khaki);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-logo {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 22px;
+  letter-spacing: 3px;
+  color: var(--cream);
+}
+.nav-logo span { color: var(--accent); }
+.nav-week {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--sand);
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--olive2);
+  border-bottom: 2px solid var(--khaki);
+  padding: 28px 20px 24px;
+  text-align: center;
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 23px, var(--stripe) 23px, var(--stripe) 24px);
+}
+.hero h1 {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(36px, 10vw, 64px);
+  letter-spacing: 4px;
+  line-height: 0.95;
+  color: var(--cream);
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--sand);
+  margin-top: 10px;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-section {
+  background: #1a1c0f;
+  border-bottom: 1px solid var(--olive2);
+  padding: 18px 20px;
+}
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.progress-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--khaki);
+  text-transform: uppercase;
+}
+.progress-pct {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 26px;
+  color: var(--accent);
+}
+.progress-track {
+  background: var(--olive2);
+  height: 10px;
+  border-radius: 1px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #e05a2b);
+  border-radius: 1px;
+  transition: width 0.6s cubic-bezier(.4,0,.2,1);
+}
+.week-dots {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.week-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 2px;
+  border: 1px solid var(--olive2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--khaki);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.week-dot.done {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+.week-dot.done::after { content: '✓'; font-size: 12px; }
+.week-dot.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  font-weight: 700;
+}
+
+/* ── MAIN LAYOUT ── */
+.main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+}
+
+/* ── GIORNO SELECTOR ── */
+.day-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.day-tab {
+  background: #1a1c0f;
+  border: 1px solid var(--olive2);
+  color: var(--sand);
+  font-family: 'Bebas Neue', cursive;
+  font-size: 16px;
+  letter-spacing: 2px;
+  padding: 14px 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  border-radius: 2px;
+}
+.day-tab:hover { border-color: var(--khaki); color: var(--cream); }
+.day-tab.active {
+  background: var(--olive2);
+  border-color: var(--accent);
+  color: var(--cream);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.day-tab .tab-sub {
+  display: block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--khaki);
+  margin-top: 3px;
+  font-weight: 400;
+}
+.day-tab.active .tab-sub { color: var(--sand); }
+
+/* ── WARMUP ── */
+.warmup-section {
+  background: var(--olive2);
+  border: 1px solid var(--khaki);
+  border-left: 4px solid var(--sand);
+  margin-bottom: 20px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.warmup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  cursor: pointer;
+  user-select: none;
+}
+.warmup-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.warmup-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: var(--sand);
+}
+.warmup-subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--khaki);
+}
+.warmup-toggle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--khaki);
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+.warmup-section.open .warmup-toggle { color: var(--sand); }
+.warmup-pills-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 0 18px 14px;
+}
+.warmup-pill {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--khaki);
+  padding: 4px 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--cream);
+  border-radius: 2px;
+}
+.warmup-cards {
+  display: none;
+  border-top: 1px solid rgba(139,125,90,0.3);
+  padding: 14px 18px 18px;
+  gap: 10px;
+  flex-direction: column;
+}
+.warmup-section.open .warmup-cards { display: flex; }
+.warmup-ex-card {
+  background: rgba(0,0,0,0.25);
+  border-left: 3px solid var(--khaki);
+  padding: 10px 14px;
+  border-radius: 0 2px 2px 0;
+}
+.warmup-ex-name {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--cream);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.warmup-ex-qty {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 400;
+  background: rgba(200,64,26,0.15);
+  border: 1px solid rgba(200,64,26,0.3);
+  padding: 2px 7px;
+  border-radius: 2px;
+}
+.warmup-ex-desc {
+  font-size: 13px;
+  color: var(--sand);
+  line-height: 1.6;
+  font-weight: 300;
+}
+.warmup-ex-desc strong { color: var(--cream); font-weight: 600; }
+
+/* ── EXERCISE CARDS ── */
+.ex-card {
+  background: #1a1c0f;
+  border: 1px solid var(--olive2);
+  margin-bottom: 12px;
+  border-radius: 2px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.ex-card.completed {
+  border-color: var(--green);
+  opacity: 0.75;
+}
+.ex-card-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  gap: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.ex-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 28px;
+  color: var(--olive2);
+  line-height: 1;
+  min-width: 28px;
+  text-align: center;
+  transition: color 0.2s;
+}
+.ex-card.completed .ex-num { color: var(--green); }
+.ex-info { flex: 1; }
+.ex-name {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--cream);
+  margin-bottom: 3px;
+}
+.ex-card.completed .ex-name {
+  text-decoration: line-through;
+  color: var(--khaki);
+}
+.ex-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.ex-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--khaki);
+  background: var(--olive2);
+  padding: 2px 8px;
+  border-radius: 1px;
+}
+.ex-badge.accent { background: rgba(200,64,26,0.2); color: #e08060; border: 1px solid rgba(200,64,26,0.3); }
+.ex-check {
+  width: 32px;
+  height: 32px;
+  border-radius: 2px;
+  border: 2px solid var(--olive2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+.ex-card.completed .ex-check {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+.ex-card.open .ex-desc { display: block; }
+.ex-desc {
+  display: none;
+  background: rgba(0,0,0,0.25);
+  border-left: 3px solid var(--khaki);
+  margin: 0 16px 14px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--sand);
+  line-height: 1.6;
+  font-weight: 300;
+  border-radius: 0 2px 2px 0;
+}
+.ex-desc strong { color: var(--cream); font-weight: 600; }
+.ex-desc-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--khaki);
+  margin-bottom: 6px;
+}
+
+/* Sets tracker */
+.sets-tracker {
+  border-top: 1px solid var(--olive2);
+  padding: 12px 16px 14px;
+  display: none;
+}
+.ex-card.open .sets-tracker { display: block; }
+.sets-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--khaki);
+  margin-bottom: 10px;
+}
+.sets-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.set-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 2px;
+  border: 1.5px solid var(--olive2);
+  background: transparent;
+  color: var(--khaki);
+  font-family: 'Bebas Neue', cursive;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.set-btn:hover { border-color: var(--sand); color: var(--cream); }
+.set-btn.done {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+.set-btn.done::after { content: '✓'; font-size: 16px; }
+.timer-btn {
+  margin-top: 12px;
+  background: rgba(200,64,26,0.15);
+  border: 1px solid var(--accent);
+  color: var(--cream);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.timer-btn:hover { background: rgba(200,64,26,0.3); }
+.timer-display {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 22px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  display: inline-block;
+  min-width: 48px;
+}
+
+/* ── COMPLETE BANNER ── */
+.complete-banner {
+  background: var(--green);
+  border-radius: 2px;
+  padding: 20px;
+  text-align: center;
+  margin-top: 20px;
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+.complete-banner.show { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.complete-banner h2 {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 32px;
+  letter-spacing: 3px;
+  color: white;
+}
+.complete-banner p {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.75);
+  margin-top: 6px;
+}
+.complete-banner button {
+  margin-top: 14px;
+  background: white;
+  color: var(--green);
+  border: none;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 16px;
+  letter-spacing: 2px;
+  padding: 10px 24px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+/* ── WEEK PROGRESSION ── */
+.progression-section {
+  margin-top: 32px;
+  background: #1a1c0f;
+  border: 1px solid var(--olive2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.prog-header {
+  background: var(--olive2);
+  padding: 12px 18px;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: var(--cream);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.prog-week-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--sand);
+  letter-spacing: 2px;
+}
+.prog-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.prog-table th {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--khaki);
+  padding: 10px 18px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--olive2);
+}
+.prog-table td {
+  padding: 10px 18px;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(74,78,44,0.3);
+  color: var(--cream);
+}
+.prog-table td:not(:first-child) {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--khaki);
+}
+.prog-table tr:last-child td { border-bottom: none; }
+.prog-curr {
+  color: var(--accent) !important;
+  font-weight: 700;
+}
+
+/* ── TIPS ── */
+.tips-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+}
+@media(max-width:500px) { .tips-row { grid-template-columns: 1fr; } }
+.tip-card {
+  background: #1a1c0f;
+  border: 1px solid var(--olive2);
+  border-top: 3px solid var(--khaki);
+  padding: 14px;
+}
+.tip-icon { font-size: 20px; margin-bottom: 8px; }
+.tip-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--khaki);
+  margin-bottom: 5px;
+}
+.tip-text {
+  font-size: 13px;
+  color: var(--sand);
+  line-height: 1.5;
+}
+
+/* ── RESET BTN ── */
+.reset-btn {
+  display: block;
+  margin: 32px auto 0;
+  background: transparent;
+  border: 1px solid var(--olive2);
+  color: var(--khaki);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">🪖 <span>MILITARE</span> BODYWEIGHT</div>
+  <div class="nav-week" id="navWeek">SETTIMANA 1</div>
+</nav>
+
+<div class="hero">
+  <h1>PROGRAMMA<br><span>MILITARE</span></h1>
+  <div class="hero-sub">GUIDA INTERATTIVA &nbsp;·&nbsp; TRACCIA IL TUO AVANZAMENTO</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-section">
+  <div class="progress-header">
+    <div class="progress-label">AVANZAMENTO TOTALE</div>
+    <div class="progress-pct" id="pctLabel">0%</div>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="week-dots" id="weekDots"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- RISCALDAMENTO -->
+  <div class="warmup-section">
+    <div class="warmup-header" onclick="toggleWarmup()">
+      <div class="warmup-header-left">
+        <span class="warmup-title">⚡ RISCALDAMENTO</span>
+        <span class="warmup-subtitle">5–10 MIN · PRIMA DI OGNI ALLENAMENTO</span>
+      </div>
+      <span class="warmup-toggle" id="warmupToggle">▼ ESPANDI</span>
+    </div>
+    <div class="warmup-pills-row">
+      <span class="warmup-pill">30s JUMPING JACK</span>
+      <span class="warmup-pill">10× ROTAZIONI BRACCIA</span>
+      <span class="warmup-pill">10× SQUAT LENTI</span>
+      <span class="warmup-pill">20s CORSA SUL POSTO</span>
+    </div>
+    <div class="warmup-cards" id="warmupCards">
+      <div class="warmup-ex-card">
+        <div class="warmup-ex-name">Jumping Jack <span class="warmup-ex-qty">30 secondi</span></div>
+        <div class="warmup-ex-desc">Parti in piedi con i piedi uniti e le braccia lungo i fianchi. <strong>Salta aprendo gambe e braccia contemporaneamente</strong> (gambe oltre la larghezza delle spalle, braccia sopra la testa). Risalta riportando tutto in posizione iniziale. Ritmo costante, respira regolarmente. Scalda tutto il corpo e alza la frequenza cardiaca.</div>
+      </div>
+      <div class="warmup-ex-card">
+        <div class="warmup-ex-name">Rotazioni delle braccia <span class="warmup-ex-qty">10 ripetizioni</span></div>
+        <div class="warmup-ex-desc">In piedi, braccia tese ai lati all'altezza delle spalle. <strong>Ruota le braccia in cerchi ampi</strong> — prima 10 giri in avanti, poi 10 all'indietro. Aumenta il diametro del cerchio progressivamente. Scioglie le spalle e prepara le articolazioni per push-up e dip.</div>
+      </div>
+      <div class="warmup-ex-card">
+        <div class="warmup-ex-name">Squat lenti <span class="warmup-ex-qty">10 ripetizioni</span></div>
+        <div class="warmup-ex-desc">Piedi a larghezza spalle, punte leggermente aperte. Scendi <strong>lentamente contando 3 secondi</strong>, tieni 1 secondo in basso, risali in 2 secondi. Non rimbalzare in basso. L'obiettivo non è la forza ma <strong>scaldare ginocchia, anche e caviglie</strong> e migliorare la mobilità prima degli squat veri.</div>
+      </div>
+      <div class="warmup-ex-card">
+        <div class="warmup-ex-name">Corsa sul posto <span class="warmup-ex-qty">20 secondi</span></div>
+        <div class="warmup-ex-desc">Corri sul posto a <strong>ritmo moderato</strong> (non al massimo come nell'allenamento). Solleva le ginocchia all'altezza dei fianchi, braccia che dondolano naturalmente. Serve a portare sangue ai muscoli delle gambe e completare il riscaldamento cardiovascolare. Fai questo per ultimo così arrivi all'allenamento già caldo.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY TABS -->
+  <div class="day-tabs">
+    <button class="day-tab active" onclick="selectDay(0)">
+      GIORNO A
+      <span class="tab-sub">SPINTA + CORE</span>
+    </button>
+    <button class="day-tab" onclick="selectDay(1)">
+      GIORNO B
+      <span class="tab-sub">TRAZIONE + GAMBE</span>
+    </button>
+    <button class="day-tab" onclick="selectDay(2)">
+      GIORNO C
+      <span class="tab-sub">TOTALE CORPO</span>
+    </button>
+  </div>
+
+  <!-- EXERCISES -->
+  <div id="exerciseList"></div>
+
+  <!-- COMPLETE BANNER -->
+  <div class="complete-banner" id="completeBanner">
+    <h2>🎖 GIORNO COMPLETATO!</h2>
+    <p id="completeMsg">OTTIMO LAVORO — CONTINUA COSÌ</p>
+    <button onclick="markDayDone()">SEGNA COME COMPLETATO</button>
+  </div>
+
+  <!-- PROGRESSIONE TABELLA -->
+  <div class="progression-section" style="margin-top:32px;">
+    <div class="prog-header">
+      <span>PROGRESSIONE SETTIMANALE</span>
+      <span class="prog-week-label" id="progWeekLabel">SETTIMANA 1 / 8</span>
+    </div>
+    <table class="prog-table">
+      <thead>
+        <tr>
+          <th>Settimana</th>
+          <th>Rip. base</th>
+          <th>Volume</th>
+          <th>Fase</th>
+        </tr>
+      </thead>
+      <tbody id="progBody"></tbody>
+    </table>
+  </div>
+
+  <!-- TIPS -->
+  <div class="tips-row">
+    <div class="tip-card">
+      <div class="tip-icon">😴</div>
+      <div class="tip-title">RECUPERO</div>
+      <div class="tip-text">Dormi 7–8 ore per notte. Il muscolo cresce durante il riposo.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🥩</div>
+      <div class="tip-title">PROTEINE</div>
+      <div class="tip-text">Almeno 1,5 g per kg di peso corporeo ogni giorno.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🚶</div>
+      <div class="tip-title">RIPOSO ATTIVO</div>
+      <div class="tip-text">Nei giorni off: camminata di 30 minuti per restare attivo.</div>
+    </div>
+  </div>
+
+  <button class="reset-btn" onclick="resetAll()">↺ RESET AVANZAMENTO</button>
+
+</div>
+
+<script>
+// ── DATA ──
+const TOTAL_WEEKS = 8;
+const DAYS_PER_WEEK = 3;
+const TOTAL_SESSIONS = TOTAL_WEEKS * DAYS_PER_WEEK; // 24
+
+const baseProgram = [
+  {
+    name: 'GIORNO A',
+    focus: 'Lunedì — Spinta + Core',
+    exercises: [
+      { name: 'Push-up', sets: 3, reps: '8–10', rest: '60 sec',
+        desc: '<strong>Mani a larghezza spalle</strong>, corpo dritto dalla testa ai piedi. Scendi finché il petto sfiora quasi il pavimento, poi spingi su con forza. Non abbassare i fianchi e non alzare il sedere. Espira nella spinta, inspira nella discesa.' },
+      { name: 'Dip su sedia', sets: 3, reps: '8–10', rest: '60 sec',
+        desc: 'Metti le <strong>mani sul bordo di una sedia stabile</strong> dietro di te, gambe tese in avanti e talloni a terra. Piega i gomiti scendendo verso il basso (fino a 90°), poi spingi su raddrizzando le braccia. Allena tricipiti e parte bassa del petto.' },
+      { name: 'Plank', sets: 3, reps: '20–30 sec', rest: '45 sec',
+        desc: '<strong>Avambracci a terra</strong>, gomiti sotto le spalle, corpo perfettamente dritto dalla testa ai talloni. Contrai l\'addome e i glutei. Non abbassare i fianchi né alzare il sedere. Respira lentamente e in modo controllato per tutta la durata.' },
+      { name: 'Sit-up', sets: 3, reps: '15', rest: '45 sec',
+        desc: 'Sdraiato a terra, <strong>ginocchia piegate</strong> e piedi a terra. Sali con il busto fino alle ginocchia (non solo le spalle come nel crunch), poi ridiscendi lentamente. Puoi incrociare le braccia sul petto o tenerle dietro la nuca senza tirare il collo.' },
+      { name: 'Burpees', sets: 3, reps: '5', rest: '90 sec',
+        desc: 'In piedi → <strong>accovacciati con le mani a terra</strong> → gambe indietro di scatto in posizione plank → (opzionale: push-up) → riporta le gambe in avanti → <strong>salto esplosivo</strong> con braccia in alto. Esercizio completo che combina forza e cardio.' },
+    ]
+  },
+  {
+    name: 'GIORNO B',
+    focus: 'Mercoledì — Trazione + Gambe',
+    exercises: [
+      { name: 'Squat', sets: 3, reps: '15', rest: '60 sec',
+        desc: '<strong>Piedi a larghezza spalle</strong>, punte leggermente verso l\'esterno. Scendi come se ti sedessi su una sedia invisibile: ginocchia allineate con le punte, schiena dritta, peso sui talloni. Scendi fino a che le cosce sono parallele al suolo, poi spingi su.' },
+      { name: 'Affondi alternati', sets: 3, reps: '10/gamba', rest: '60 sec',
+        desc: 'In piedi, fai un <strong>passo lungo in avanti</strong> con una gamba e scendi fino a che il ginocchio posteriore sfiora il pavimento. Il ginocchio anteriore non deve superare la punta del piede. Torna in piedi e ripeti con l\'altra gamba. Mantieni il busto eretto.' },
+      { name: 'Rematore con asciugamano', sets: 3, reps: '5–8', rest: '90 sec',
+        desc: 'Annoda un <strong>asciugamano robusto attorno alla maniglia di una porta chiusa</strong>. Tieniti in piedi di fronte alla porta, afferra le due estremità con entrambe le mani e cammina indietro finché le braccia sono quasi tese e il corpo è inclinato all\'indietro. Da qui, <strong>tira il petto verso la porta</strong> piegando i gomiti lungo i fianchi (non aperti di lato). Ridiscendi lentamente e ripeti. Più i piedi sono vicini alla porta, più è difficile. Metti i piedi contro la base della porta per non scivolare. Il corpo resta rigido come un asse.' },
+      { name: 'Superman', sets: 3, reps: '12', rest: '45 sec',
+        desc: 'Sdraiato <strong>a pancia in giù</strong>, braccia tese davanti e gambe dritte. Solleva contemporaneamente braccia, petto e gambe dal pavimento, come se volassi. Tieni la posizione 1–2 secondi, poi ridiscendi lentamente. Rinforza la zona lombare e i glutei.' },
+      { name: 'Mountain Climber', sets: 3, reps: '20 sec', rest: '45 sec',
+        desc: 'Parti in <strong>posizione di plank sulle mani</strong>. Porta alternativamente le ginocchia verso il petto a ritmo veloce, come se stessi scalando una parete. Tieni i fianchi fermi e stabili, non ondeggiare. Più vai veloce, più è cardio.' },
+    ]
+  },
+  {
+    name: 'GIORNO C',
+    focus: 'Venerdì — Totale Corpo',
+    exercises: [
+      { name: 'Push-up', sets: 3, reps: '10', rest: '60 sec',
+        desc: '<strong>Mani a larghezza spalle</strong>, corpo dritto dalla testa ai piedi. Scendi finché il petto sfiora quasi il pavimento, poi spingi su con forza. Non abbassare i fianchi e non alzare il sedere. Espira nella spinta, inspira nella discesa.' },
+      { name: 'Squat con salto', sets: 3, reps: '8', rest: '90 sec',
+        desc: 'Come lo squat normale, ma nella fase di risalita <strong>esplodi verso l\'alto con un salto</strong>. Atterra morbido sulle punte dei piedi ammortizzando con le ginocchia, poi scendi subito di nuovo senza rimbalzare. Più intenso dello squat classico, sviluppa potenza nelle gambe.' },
+      { name: 'Plank laterale', sets: 3, reps: '20 sec/lato', rest: '45 sec',
+        desc: 'Appoggiati su un <strong>avambraccio di lato</strong>, gomito sotto la spalla. Solleva i fianchi fino ad avere il corpo in linea retta dalla testa ai piedi. L\'altra mano può stare sul fianco o sollevata. Tieni la posizione, poi cambia lato. Allena gli obliqui.' },
+      { name: 'Burpees', sets: 3, reps: '6', rest: '90 sec',
+        desc: 'In piedi → <strong>accovacciati con le mani a terra</strong> → gambe indietro di scatto in posizione plank → (opzionale: push-up) → riporta le gambe in avanti → <strong>salto esplosivo</strong> con braccia in alto. Esercizio completo che combina forza e cardio.' },
+      { name: 'Corsa sul posto intensa', sets: 3, reps: '30 sec', rest: '60 sec',
+        desc: 'Corri sul posto <strong>alzando le ginocchia più in alto possibile</strong>, almeno all\'altezza dei fianchi. Le braccia pompano in sincronia come nella corsa vera. Mantieni un ritmo sostenuto e costante per tutta la durata. Più le ginocchia salgono, più è efficace.' },
+    ]
+  }
+];
+
+// Parse numeric reps for progression
+function parseReps(r, week) {
+  const bonus = Math.floor((week - 1) / 2);
+  if (r.includes('–')) {
+    const [a, b] = r.split('–').map(x => parseInt(x));
+    return `${a + bonus}–${b + bonus}`;
+  }
+  if (r.includes('/')) return r; // per gamba etc
+  if (r.includes('sec')) return r;
+  const n = parseInt(r);
+  return isNaN(n) ? r : String(n + bonus);
+}
+
+// ── STATE ──
+let state = load();
+
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem('mil_state') || 'null');
+    if (s && s.version === 2) return s;
+  } catch(e){}
+  return {
+    version: 2,
+    currentWeek: 1,
+    completedSessions: 0,
+    doneSessions: {}, // "W1-D0" etc
+    currentDay: 0,
+    // per-session exercise completion: key "W1-D0" -> [bool per exercise]
+    exState: {},
+    // per-exercise open state (ephemeral, not saved)
+    setsDone: {} // "W1-D0-E0" -> [bool per set]
+  };
+}
+
+function save() {
+  try { localStorage.setItem('mil_state', JSON.stringify(state)); } catch(e){}
+}
+
+function sessionKey(week, day) { return `W${week}-D${day}`; }
+function exKey(week, day, ex) { return `W${week}-D${day}-E${ex}`; }
+
+// ── TIMERS ──
+let timerIntervals = {};
+
+function startTimer(id, seconds, btn, display) {
+  if (timerIntervals[id]) { clearInterval(timerIntervals[id]); delete timerIntervals[id]; btn.textContent = '⏱ AVVIA RIPOSO'; display.textContent = formatTime(seconds); return; }
+  let left = seconds;
+  display.textContent = formatTime(left);
+  btn.textContent = '⏹ STOP';
+  timerIntervals[id] = setInterval(() => {
+    left--;
+    display.textContent = formatTime(left);
+    if (left <= 0) { clearInterval(timerIntervals[id]); delete timerIntervals[id]; display.textContent = '🏁 VIA!'; btn.textContent = '⏱ AVVIA RIPOSO'; }
+  }, 1000);
+}
+
+function formatTime(s) { return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
+function parseRestSeconds(r) { const m = r.match(/(\d+)\s*sec/); return m ? parseInt(m[1]) : 60; }
+
+function toggleWarmup() {
+  const section = document.querySelector('.warmup-section');
+  const toggle = document.getElementById('warmupToggle');
+  const isOpen = section.classList.toggle('open');
+  toggle.textContent = isOpen ? '▲ CHIUDI' : '▼ ESPANDI';
+}
+
+// ── RENDER ──
+let openCards = {};
+
+function render() {
+  renderWeekDots();
+  renderExercises();
+  renderProgression();
+  document.getElementById('navWeek').textContent = `SETTIMANA ${state.currentWeek}`;
+  document.getElementById('progWeekLabel').textContent = `SETTIMANA ${state.currentWeek} / ${TOTAL_WEEKS}`;
+}
+
+function renderWeekDots() {
+  const container = document.getElementById('weekDots');
+  const total = TOTAL_SESSIONS;
+  container.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const w = Math.floor(i / DAYS_PER_WEEK) + 1;
+    const d = i % DAYS_PER_WEEK;
+    const key = sessionKey(w, d);
+    const done = !!state.doneSessions[key];
+    const isCurrent = (i === state.completedSessions);
+    const div = document.createElement('div');
+    div.className = 'week-dot' + (done ? ' done' : '') + (isCurrent && !done ? ' active' : '');
+    if (!done) div.textContent = i + 1;
+    div.title = `Settimana ${w}, Giorno ${['A','B','C'][d]}`;
+    container.appendChild(div);
+  }
+  // progress
+  const pct = Math.round((state.completedSessions / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('pctLabel').textContent = pct + '%';
+}
+
+function renderExercises() {
+  const day = state.currentDay;
+  const week = state.currentWeek;
+  const prog = baseProgram[day];
+  const sKey = sessionKey(week, day);
+  const container = document.getElementById('exerciseList');
+  container.innerHTML = '';
+
+  prog.exercises.forEach((ex, i) => {
+    const eKey = exKey(week, day, i);
+    const setsDone = state.setsDone[eKey] || Array(ex.sets).fill(false);
+    const allSetsDone = setsDone.every(Boolean);
+
+    const card = document.createElement('div');
+    card.className = 'ex-card' + (allSetsDone ? ' completed' : '') + (openCards[eKey] ? ' open' : '');
+
+    const repsDisplay = parseReps(ex.reps, week);
+
+    card.innerHTML = `
+      <div class="ex-card-header" onclick="toggleCard('${eKey}', this)">
+        <div class="ex-num">${i + 1}</div>
+        <div class="ex-info">
+          <div class="ex-name">${ex.name}</div>
+          <div class="ex-meta">
+            <span class="ex-badge">${ex.sets} SERIE</span>
+            <span class="ex-badge accent">${repsDisplay} RIP.</span>
+            <span class="ex-badge">⏱ ${ex.rest}</span>
+          </div>
+        </div>
+        <div class="ex-check">${allSetsDone ? '✓' : ''}</div>
+      </div>
+      <div class="ex-desc">
+        <div class="ex-desc-label">📋 COME SI ESEGUE</div>
+        ${ex.desc}
+      </div>
+      <div class="sets-tracker">
+        <div class="sets-label">TRACCIA LE SERIE</div>
+        <div class="sets-row" id="sets-${eKey}">
+          ${Array.from({length: ex.sets}, (_, s) => `
+            <button class="set-btn${setsDone[s] ? ' done' : ''}" onclick="toggleSet('${eKey}', ${s}, ${ex.sets})">
+              ${setsDone[s] ? '' : `S${s+1}`}
+            </button>
+          `).join('')}
+        </div>
+        <button class="timer-btn" id="tbtn-${eKey}" onclick="startTimer('${eKey}', ${parseRestSeconds(ex.rest)}, this, document.getElementById('td-${eKey}'))">
+          ⏱ AVVIA RIPOSO &nbsp;<span class="timer-display" id="td-${eKey}">${formatTime(parseRestSeconds(ex.rest))}</span>
+        </button>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+
+  checkAllDone();
+}
+
+function toggleCard(eKey, el) {
+  openCards[eKey] = !openCards[eKey];
+  el.closest('.ex-card').classList.toggle('open', !!openCards[eKey]);
+}
+
+function toggleSet(eKey, setIdx, totalSets) {
+  if (!state.setsDone[eKey]) state.setsDone[eKey] = Array(totalSets).fill(false);
+  state.setsDone[eKey][setIdx] = !state.setsDone[eKey][setIdx];
+  save();
+  renderExercises();
+}
+
+function checkAllDone() {
+  const day = state.currentDay;
+  const week = state.currentWeek;
+  const prog = baseProgram[day];
+  const allDone = prog.exercises.every((ex, i) => {
+    const eKey = exKey(week, day, i);
+    const sd = state.setsDone[eKey] || [];
+    return sd.length === ex.sets && sd.every(Boolean);
+  });
+  const banner = document.getElementById('completeBanner');
+  if (allDone) {
+    banner.classList.add('show');
+    const dayNames = ['A (Spinta + Core)', 'B (Trazione + Gambe)', 'C (Totale Corpo)'];
+    document.getElementById('completeMsg').textContent = `GIORNO ${dayNames[day]} — SETTIMANA ${week} COMPLETATA!`;
+  } else {
+    banner.classList.remove('show');
+  }
+}
+
+function markDayDone() {
+  const key = sessionKey(state.currentWeek, state.currentDay);
+  if (!state.doneSessions[key]) {
+    state.doneSessions[key] = true;
+    state.completedSessions = Math.min(state.completedSessions + 1, TOTAL_SESSIONS);
+    // Advance week/day
+    state.currentDay = (state.currentDay + 1) % 3;
+    if (state.currentDay === 0 && state.currentWeek < TOTAL_WEEKS) {
+      state.currentWeek++;
+    }
+    save();
+  }
+  // Update tabs
+  document.querySelectorAll('.day-tab').forEach((t, i) => t.classList.toggle('active', i === state.currentDay));
+  document.getElementById('completeBanner').classList.remove('show');
+  openCards = {};
+  render();
+}
+
+function selectDay(day) {
+  state.currentDay = day;
+  document.querySelectorAll('.day-tab').forEach((t, i) => t.classList.toggle('active', i === day));
+  openCards = {};
+  renderExercises();
+}
+
+function renderProgression() {
+  const body = document.getElementById('progBody');
+  body.innerHTML = '';
+  const phases = ['BASE','BASE','SVILUPPO','SVILUPPO','INTENSITÀ','INTENSITÀ','PICCO','PICCO'];
+  for (let w = 1; w <= TOTAL_WEEKS; w++) {
+    const bonus = Math.floor((w - 1) / 2);
+    const vol = 3 * (15 + bonus) + 3 * (8 + bonus) + 3 * (5 + bonus);
+    const isCurr = w === state.currentWeek;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="${isCurr ? 'prog-curr' : ''}">SETTIMANA ${w}${isCurr ? ' ◀' : ''}</td>
+      <td>+${bonus} rip.</td>
+      <td>~${vol} rip. tot.</td>
+      <td>${phases[w-1]}</td>
+    `;
+    body.appendChild(tr);
+  }
+}
+
+function resetAll() {
+  if (!confirm('Sei sicuro di voler azzerare tutto il progresso?')) return;
+  localStorage.removeItem('mil_state');
+  state = load();
+  openCards = {};
+  render();
+}
+
+// ── INIT ──
+render();
+document.querySelectorAll('.day-tab').forEach((t, i) => t.classList.toggle('active', i === state.currentDay));
+</script>
+</body>
+</html>
