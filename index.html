@@ -435,15 +435,132 @@ body {
   color: white;
 }
 .set-btn.done::after { content: '✓'; font-size: 16px; }
+.rest-timer-block {
+  margin-top: 14px;
+  background: rgba(200,64,26,0.08);
+  border: 1px solid rgba(200,64,26,0.3);
+  border-radius: 3px;
+  padding: 12px 16px;
+}
+.rest-timer-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--khaki);
+  margin-bottom: 8px;
+}
+.rest-timer-countdown {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 52px;
+  color: var(--accent);
+  letter-spacing: 4px;
+  line-height: 1;
+  text-align: center;
+  display: block;
+  margin-bottom: 10px;
+}
+.rest-timer-countdown.urgent { color: #ff6040; animation: pulse 0.5s infinite alternate; }
+@keyframes pulse { from { opacity:1; } to { opacity:0.5; } }
+.rest-timer-bar-track {
+  background: var(--olive2);
+  height: 6px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.rest-timer-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #e05a2b);
+  border-radius: 2px;
+  transition: width 1s linear;
+}
+.rest-timer-btns { display: flex; gap: 8px; }
 .timer-btn {
-  margin-top: 12px;
+  flex: 1;
   background: rgba(200,64,26,0.15);
   border: 1px solid var(--accent);
   color: var(--cream);
   font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 2px;
-  padding: 8px 16px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+  text-align: center;
+}
+.timer-btn:hover { background: rgba(200,64,26,0.3); }
+.timer-btn.skip-btn {
+  flex: 0 0 auto;
+  background: transparent;
+  border-color: var(--olive2);
+  color: var(--khaki);
+  font-size: 9px;
+}
+.timer-btn.skip-btn:hover { border-color: var(--sand); color: var(--cream); }
+.ex-timer-block {
+  margin: 10px 0 14px;
+  background: rgba(74,124,63,0.1);
+  border: 1px solid rgba(74,124,63,0.4);
+  border-radius: 3px;
+  padding: 12px 16px;
+}
+.ex-timer-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #6ab05a;
+  margin-bottom: 8px;
+}
+.ex-timer-countdown {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 64px;
+  color: var(--green);
+  letter-spacing: 4px;
+  line-height: 1;
+  text-align: center;
+  display: block;
+  margin-bottom: 10px;
+}
+.ex-timer-countdown.urgent { color: #ff6040; animation: pulse 0.5s infinite alternate; }
+.ex-timer-bar-track {
+  background: var(--olive2);
+  height: 6px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.ex-timer-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), #6ab05a);
+  border-radius: 2px;
+  transition: width 1s linear;
+}
+.ex-timer-btns { display: flex; gap: 8px; }
+.ex-timer-btn {
+  flex: 1;
+  background: rgba(74,124,63,0.15);
+  border: 1px solid var(--green);
+  color: var(--cream);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+  text-align: center;
+}
+.ex-timer-btn:hover { background: rgba(74,124,63,0.3); }
+.warmup-timer-btn {
+  margin-top: 8px;
+  background: rgba(200,64,26,0.12);
+  border: 1px solid rgba(200,64,26,0.4);
+  color: var(--cream);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 6px 14px;
   cursor: pointer;
   border-radius: 2px;
   transition: all 0.2s;
@@ -451,14 +568,14 @@ body {
   align-items: center;
   gap: 8px;
 }
-.timer-btn:hover { background: rgba(200,64,26,0.3); }
-.timer-display {
+.warmup-timer-btn:hover { background: rgba(200,64,26,0.25); }
+.warmup-timer-display {
   font-family: 'Bebas Neue', cursive;
-  font-size: 22px;
+  font-size: 20px;
   color: var(--accent);
   letter-spacing: 2px;
+  min-width: 44px;
   display: inline-block;
-  min-width: 48px;
 }
 
 /* ── COMPLETE BANNER ── */
@@ -646,6 +763,7 @@ body {
       <div class="warmup-ex-card">
         <div class="warmup-ex-name">Jumping Jack <span class="warmup-ex-qty">30 secondi</span></div>
         <div class="warmup-ex-desc">Parti in piedi con i piedi uniti e le braccia lungo i fianchi. <strong>Salta aprendo gambe e braccia contemporaneamente</strong> (gambe oltre la larghezza delle spalle, braccia sopra la testa). Risalta riportando tutto in posizione iniziale. Ritmo costante, respira regolarmente. Scalda tutto il corpo e alza la frequenza cardiaca.</div>
+        <button class="warmup-timer-btn" onclick="toggleWarmupTimer('wjj', 30, this, document.getElementById('wt-jj'))">⏱ AVVIA <span class="warmup-timer-display" id="wt-jj">0:30</span></button>
       </div>
       <div class="warmup-ex-card">
         <div class="warmup-ex-name">Rotazioni delle braccia <span class="warmup-ex-qty">10 ripetizioni</span></div>
@@ -658,6 +776,7 @@ body {
       <div class="warmup-ex-card">
         <div class="warmup-ex-name">Corsa sul posto <span class="warmup-ex-qty">20 secondi</span></div>
         <div class="warmup-ex-desc">Corri sul posto a <strong>ritmo moderato</strong> (non al massimo come nell'allenamento). Solleva le ginocchia all'altezza dei fianchi, braccia che dondolano naturalmente. Serve a portare sangue ai muscoli delle gambe e completare il riscaldamento cardiovascolare. Fai questo per ultimo così arrivi all'allenamento già caldo.</div>
+        <button class="warmup-timer-btn" onclick="toggleWarmupTimer('wcrs', 20, this, document.getElementById('wt-crs'))">⏱ AVVIA <span class="warmup-timer-display" id="wt-crs">0:20</span></button>
       </div>
     </div>
   </div>
@@ -831,20 +950,117 @@ function exKey(week, day, ex) { return `W${week}-D${day}-E${ex}`; }
 // ── TIMERS ──
 let timerIntervals = {};
 
-function startTimer(id, seconds, btn, display) {
-  if (timerIntervals[id]) { clearInterval(timerIntervals[id]); delete timerIntervals[id]; btn.textContent = '⏱ AVVIA RIPOSO'; display.textContent = formatTime(seconds); return; }
-  let left = seconds;
-  display.textContent = formatTime(left);
-  btn.textContent = '⏹ STOP';
-  timerIntervals[id] = setInterval(() => {
-    left--;
-    display.textContent = formatTime(left);
-    if (left <= 0) { clearInterval(timerIntervals[id]); delete timerIntervals[id]; display.textContent = '🏁 VIA!'; btn.textContent = '⏱ AVVIA RIPOSO'; }
-  }, 1000);
+function formatTime(s) {
+  if (s <= 0) return '0:00';
+  return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+}
+function parseRestSeconds(r) { const m = r.match(/(\d+)\s*sec/); return m ? parseInt(m[1]) : 60; }
+function parseExSeconds(r) {
+  // handles "20 sec", "30 sec", "20–30 sec" (takes max), "20 sec/lato"
+  const m = r.match(/(\d+)[^\d]*?(\d+)?\s*sec/);
+  if (!m) return null;
+  const a = parseInt(m[1]);
+  const b = m[2] ? parseInt(m[2]) : null;
+  return b ? Math.max(a, b) : a;
+}
+function isTimedEx(ex) { return ex.reps.includes('sec'); }
+
+function startRestTimer(eKey, totalSec) {
+  if (timerIntervals['rest_' + eKey]) { clearInterval(timerIntervals['rest_' + eKey]); delete timerIntervals['rest_' + eKey]; }
+  let left = totalSec;
+  const countdown = document.getElementById('rest-cd-' + eKey);
+  const bar = document.getElementById('rest-bar-' + eKey);
+  const btn = document.getElementById('rest-btn-' + eKey);
+  if (!countdown) return;
+  const update = () => {
+    countdown.textContent = formatTime(left);
+    const pct = (left / totalSec) * 100;
+    if (bar) bar.style.width = pct + '%';
+    countdown.classList.toggle('urgent', left <= 5 && left > 0);
+    if (left <= 0) {
+      clearInterval(timerIntervals['rest_' + eKey]);
+      delete timerIntervals['rest_' + eKey];
+      countdown.textContent = '\ud83c\udfc1 VIA!';
+      countdown.style.fontSize = '32px';
+      if (btn) btn.textContent = '\u21ba RICOMINCIA';
+      if (bar) bar.style.width = '0%';
+    }
+  };
+  update();
+  timerIntervals['rest_' + eKey] = setInterval(() => { left--; update(); }, 1000);
+  if (btn) btn.textContent = '\u23f9 STOP';
 }
 
-function formatTime(s) { return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
-function parseRestSeconds(r) { const m = r.match(/(\d+)\s*sec/); return m ? parseInt(m[1]) : 60; }
+function toggleRestTimer(eKey, totalSec) {
+  const btn = document.getElementById('rest-btn-' + eKey);
+  const countdown = document.getElementById('rest-cd-' + eKey);
+  if (timerIntervals['rest_' + eKey]) {
+    clearInterval(timerIntervals['rest_' + eKey]);
+    delete timerIntervals['rest_' + eKey];
+    if (btn) btn.textContent = '\u25b6 AVVIA RIPOSO';
+    return;
+  }
+  if (countdown) countdown.style.fontSize = '';
+  startRestTimer(eKey, totalSec);
+}
+
+function startExTimer(eKey, totalSec) {
+  if (timerIntervals['ex_' + eKey]) { clearInterval(timerIntervals['ex_' + eKey]); delete timerIntervals['ex_' + eKey]; }
+  let left = totalSec;
+  const countdown = document.getElementById('ex-cd-' + eKey);
+  const bar = document.getElementById('ex-bar-' + eKey);
+  const btn = document.getElementById('ex-btn-' + eKey);
+  if (!countdown) return;
+  const update = () => {
+    countdown.textContent = formatTime(left);
+    const pct = (left / totalSec) * 100;
+    if (bar) bar.style.width = pct + '%';
+    countdown.classList.toggle('urgent', left <= 5 && left > 0);
+    if (left <= 0) {
+      clearInterval(timerIntervals['ex_' + eKey]);
+      delete timerIntervals['ex_' + eKey];
+      countdown.textContent = '\u2713 FATTO!';
+      countdown.style.fontSize = '36px';
+      if (btn) btn.textContent = '\u21ba RICOMINCIA';
+      if (bar) bar.style.width = '0%';
+    }
+  };
+  update();
+  timerIntervals['ex_' + eKey] = setInterval(() => { left--; update(); }, 1000);
+  if (btn) btn.textContent = '\u23f9 STOP';
+}
+
+function toggleExTimer(eKey, totalSec) {
+  const btn = document.getElementById('ex-btn-' + eKey);
+  const countdown = document.getElementById('ex-cd-' + eKey);
+  if (timerIntervals['ex_' + eKey]) {
+    clearInterval(timerIntervals['ex_' + eKey]);
+    delete timerIntervals['ex_' + eKey];
+    if (btn) btn.textContent = '\u25b6 AVVIA TIMER';
+    return;
+  }
+  if (countdown) countdown.style.fontSize = '';
+  startExTimer(eKey, totalSec);
+}
+
+let warmupTimers = {};
+function toggleWarmupTimer(id, totalSec, btnEl, displayEl) {
+  if (warmupTimers[id]) {
+    clearInterval(warmupTimers[id]);
+    delete warmupTimers[id];
+    displayEl.textContent = formatTime(totalSec);
+    btnEl.textContent = '\u23f1 AVVIA';
+    return;
+  }
+  let left = totalSec;
+  displayEl.textContent = formatTime(left);
+  btnEl.textContent = '\u23f9 STOP';
+  warmupTimers[id] = setInterval(() => {
+    left--;
+    displayEl.textContent = left <= 0 ? '\ud83c\udfc1 VIA!' : formatTime(left);
+    if (left <= 0) { clearInterval(warmupTimers[id]); delete warmupTimers[id]; btnEl.textContent = '\u21ba RICOMINCIA'; }
+  }, 1000);
+}
 
 function toggleWarmup() {
   const section = document.querySelector('.warmup-section');
@@ -904,6 +1120,12 @@ function renderExercises() {
 
     const repsDisplay = parseReps(ex.reps, week);
 
+    const timed = isTimedEx(ex);
+    const exSec = timed ? parseExSeconds(ex.reps) : null;
+    const restSec = parseRestSeconds(ex.rest);
+    const repLabel = timed ? repsDisplay : repsDisplay + ' RIP.';
+    const repBadgeExtra = timed ? ' accent' : ' accent';
+
     card.innerHTML = `
       <div class="ex-card-header" onclick="toggleCard('${eKey}', this)">
         <div class="ex-num">${i + 1}</div>
@@ -911,8 +1133,8 @@ function renderExercises() {
           <div class="ex-name">${ex.name}</div>
           <div class="ex-meta">
             <span class="ex-badge">${ex.sets} SERIE</span>
-            <span class="ex-badge accent">${repsDisplay} RIP.</span>
-            <span class="ex-badge">⏱ ${ex.rest}</span>
+            <span class="ex-badge accent">${timed ? '⏱ ' : ''}${repLabel}</span>
+            <span class="ex-badge">RIPOSO ${ex.rest}</span>
           </div>
         </div>
         <div class="ex-check">${allSetsDone ? '✓' : ''}</div>
@@ -930,9 +1152,24 @@ function renderExercises() {
             </button>
           `).join('')}
         </div>
-        <button class="timer-btn" id="tbtn-${eKey}" onclick="startTimer('${eKey}', ${parseRestSeconds(ex.rest)}, this, document.getElementById('td-${eKey}'))">
-          ⏱ AVVIA RIPOSO &nbsp;<span class="timer-display" id="td-${eKey}">${formatTime(parseRestSeconds(ex.rest))}</span>
-        </button>
+        ${timed && exSec ? `
+        <div class="ex-timer-block">
+          <div class="ex-timer-label">⏱ TIMER ESERCIZIO</div>
+          <span class="ex-timer-countdown" id="ex-cd-${eKey}">${formatTime(exSec)}</span>
+          <div class="ex-timer-bar-track"><div class="ex-timer-bar-fill" id="ex-bar-${eKey}" style="width:100%"></div></div>
+          <div class="ex-timer-btns">
+            <button class="ex-timer-btn" id="ex-btn-${eKey}" onclick="toggleExTimer('${eKey}', ${exSec})">▶ AVVIA TIMER</button>
+          </div>
+        </div>` : ''}
+        <div class="rest-timer-block">
+          <div class="rest-timer-label">⏸ TIMER RIPOSO — ${ex.rest}</div>
+          <span class="rest-timer-countdown" id="rest-cd-${eKey}">${formatTime(restSec)}</span>
+          <div class="rest-timer-bar-track"><div class="rest-timer-bar-fill" id="rest-bar-${eKey}" style="width:100%"></div></div>
+          <div class="rest-timer-btns">
+            <button class="timer-btn" id="rest-btn-${eKey}" onclick="toggleRestTimer('${eKey}', ${restSec})">▶ AVVIA RIPOSO</button>
+            <button class="timer-btn skip-btn" onclick="document.getElementById('rest-cd-${eKey}').textContent='🏁 VIA!'; if(timerIntervals['rest_${eKey}']){clearInterval(timerIntervals['rest_${eKey}']);delete timerIntervals['rest_${eKey}'];}">SALTA</button>
+          </div>
+        </div>
       </div>
     `;
 
