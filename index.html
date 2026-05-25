@@ -1164,9 +1164,9 @@ function startExTimer(eKey, totalSec) {
     if (left <= 0) {
       clearInterval(timerIntervals['ex_' + eKey]);
       delete timerIntervals['ex_' + eKey];
-      countdown.textContent = '\u2713 FATTO!';
+      countdown.textContent = '⏹ STOP';
       countdown.style.fontSize = '36px';
-      if (btn) btn.textContent = '\u21ba RICOMINCIA';
+      if (btn) btn.textContent = '↺ RICOMINCIA';
       if (bar) bar.style.width = '0%';
     }
   };
@@ -1212,7 +1212,7 @@ function toggleWarmupTimer(id, totalSec, cdId, barId, btnId) {
     if (left <= 0) {
       clearInterval(warmupTimers[id]);
       delete warmupTimers[id];
-      cd.textContent = '🏁 VIA!';
+      cd.textContent = '⏹ STOP';
       cd.style.fontSize = '32px';
       if (bar) bar.style.width = '0%';
       if (btn) btn.textContent = '↺ RICOMINCIA';
