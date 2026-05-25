@@ -702,7 +702,7 @@ body {
 /* ── RESET BTN ── */
 .reset-btn {
   display: block;
-  margin: 32px auto 0;
+  margin: 12px auto 0;
   background: transparent;
   border: 1px solid var(--olive2);
   color: var(--khaki);
@@ -715,6 +715,95 @@ body {
   transition: all 0.2s;
 }
 .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── SYNC ── */
+.sync-section {
+  margin-top: 32px;
+  background: #1a1c0f;
+  border: 1px solid var(--olive2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.sync-header {
+  background: var(--olive2);
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.sync-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: var(--cream);
+}
+.sync-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--sand);
+}
+.sync-status.ok { color: #6ab05a; }
+.sync-status.err { color: var(--accent); }
+.sync-body {
+  padding: 16px 18px;
+}
+.sync-url-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.sync-input {
+  flex: 1;
+  background: #0f1008;
+  border: 1px solid var(--olive2);
+  color: var(--cream);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  padding: 8px 12px;
+  border-radius: 2px;
+  min-width: 0;
+}
+.sync-input:focus { outline: none; border-color: var(--khaki); }
+.sync-input::placeholder { color: var(--khaki); opacity: 0.6; }
+.sync-btn {
+  background: var(--olive2);
+  border: 1px solid var(--khaki);
+  color: var(--cream);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.sync-btn:hover { background: var(--olive); border-color: var(--sand); }
+.sync-btn.primary {
+  background: rgba(200,64,26,0.2);
+  border-color: var(--accent);
+  color: var(--cream);
+}
+.sync-btn.primary:hover { background: rgba(200,64,26,0.35); }
+.sync-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--khaki);
+  line-height: 1.6;
+}
+.sync-note a { color: var(--sand); }
+.sync-log {
+  margin-top: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--khaki);
+  min-height: 16px;
+}
 </style>
 </head>
 <body>
@@ -842,6 +931,24 @@ body {
       <div class="tip-icon">🚶</div>
       <div class="tip-title">RIPOSO ATTIVO</div>
       <div class="tip-text">Nei giorni off: camminata di 30 minuti per restare attivo.</div>
+    </div>
+  </div>
+
+  <!-- SYNC GOOGLE SHEETS -->
+  <div class="sync-section">
+    <div class="sync-header">
+      <span class="sync-title">☁️ SYNC GOOGLE SHEETS</span>
+      <span class="sync-status" id="syncStatus">NON CONFIGURATO</span>
+    </div>
+    <div class="sync-body">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+        <button class="sync-btn primary" onclick="syncNow()">↑ SALVA ORA</button>
+        <button class="sync-btn" onclick="loadFromCloud()">↓ RIPRISTINA</button>
+      </div>
+      <div class="sync-log" id="syncLog">Sync automatico attivo — salva dopo ogni serie.</div>
+      <div class="sync-note" style="margin-top:10px;">
+        Il progresso viene salvato automaticamente nel cloud dopo ogni serie completata. Se perdi i dati tocca RIPRISTINA.
+      </div>
     </div>
   </div>
 
@@ -1263,9 +1370,74 @@ function resetAll() {
   render();
 }
 
+// ── NPOINT SYNC ──
+const NPOINT_URL = 'https://api.npoint.io/73dc05004e76eb54ad94';
+
+function setSyncStatus(msg, cls) {
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'sync-status' + (cls ? ' ' + cls : '');
+}
+
+function setSyncLog(msg) {
+  const el = document.getElementById('syncLog');
+  if (el) el.textContent = msg;
+}
+
+async function syncNow() {
+  setSyncStatus('SINCRONIZZANDO...', '');
+  setSyncLog('↑ Salvataggio in corso...');
+  try {
+    await fetch(NPOINT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state)
+    });
+    const now = new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+    setSyncStatus('✓ SYNC ' + now, 'ok');
+    setSyncLog('✓ Progresso salvato alle ' + now);
+  } catch(e) {
+    setSyncStatus('⚠ ERRORE', 'err');
+    setSyncLog('✗ Errore connessione. Riprova.');
+  }
+}
+
+async function loadFromCloud() {
+  setSyncStatus('CARICANDO...', '');
+  setSyncLog('↓ Recupero dati...');
+  try {
+    const res = await fetch(NPOINT_URL);
+    const loaded = await res.json();
+    if (loaded && loaded.version === 2) {
+      state = loaded;
+      try { localStorage.setItem('mil_state', JSON.stringify(state)); } catch(e){}
+      openCards = {};
+      render();
+      setSyncStatus('✓ RIPRISTINATO', 'ok');
+      setSyncLog('✓ Progresso ripristinato dal cloud!');
+    } else {
+      setSyncLog('⚠ Nessun dato valido trovato.');
+      setSyncStatus('⚠ VUOTO', 'err');
+    }
+  } catch(e) {
+    setSyncStatus('⚠ ERRORE', 'err');
+    setSyncLog('✗ Errore connessione. Riprova.');
+  }
+}
+
+// Override save: salva locale + sync automatico dopo 3 sec di inattività
+function save() {
+  try { localStorage.setItem('mil_state', JSON.stringify(state)); } catch(e){}
+  clearTimeout(save._t);
+  save._t = setTimeout(syncNow, 3000);
+}
+
 // ── INIT ──
 render();
 document.querySelectorAll('.day-tab').forEach((t, i) => t.classList.toggle('active', i === state.currentDay));
+setSyncStatus('✓ CONFIGURATO', 'ok');
+setSyncLog('Sync automatico attivo — salva dopo ogni serie.');
 </script>
 </body>
 </html>
