@@ -552,31 +552,59 @@ body {
   text-align: center;
 }
 .ex-timer-btn:hover { background: rgba(74,124,63,0.3); }
+.warmup-timer-block {
+  margin-top: 10px;
+  background: rgba(200,64,26,0.08);
+  border: 1px solid rgba(200,64,26,0.3);
+  border-radius: 3px;
+  padding: 10px 14px;
+}
+.warmup-timer-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--khaki);
+  margin-bottom: 6px;
+}
+.warmup-timer-countdown {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 52px;
+  color: var(--accent);
+  letter-spacing: 4px;
+  line-height: 1;
+  text-align: center;
+  display: block;
+  margin-bottom: 8px;
+}
+.warmup-timer-countdown.urgent { color: #ff6040; animation: pulse 0.5s infinite alternate; }
+.warmup-timer-bar-track {
+  background: var(--olive2);
+  height: 6px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.warmup-timer-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #e05a2b);
+  border-radius: 2px;
+  transition: width 1s linear;
+}
 .warmup-timer-btn {
-  margin-top: 8px;
-  background: rgba(200,64,26,0.12);
-  border: 1px solid rgba(200,64,26,0.4);
+  width: 100%;
+  background: rgba(200,64,26,0.15);
+  border: 1px solid var(--accent);
   color: var(--cream);
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
   letter-spacing: 2px;
-  padding: 6px 14px;
+  padding: 8px 14px;
   cursor: pointer;
   border-radius: 2px;
   transition: all 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  text-align: center;
 }
-.warmup-timer-btn:hover { background: rgba(200,64,26,0.25); }
-.warmup-timer-display {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 20px;
-  color: var(--accent);
-  letter-spacing: 2px;
-  min-width: 44px;
-  display: inline-block;
-}
+.warmup-timer-btn:hover { background: rgba(200,64,26,0.3); }
 
 /* ── COMPLETE BANNER ── */
 .complete-banner {
@@ -852,7 +880,12 @@ body {
       <div class="warmup-ex-card">
         <div class="warmup-ex-name">Jumping Jack <span class="warmup-ex-qty">30 secondi</span></div>
         <div class="warmup-ex-desc">Parti in piedi con i piedi uniti e le braccia lungo i fianchi. <strong>Salta aprendo gambe e braccia contemporaneamente</strong> (gambe oltre la larghezza delle spalle, braccia sopra la testa). Risalta riportando tutto in posizione iniziale. Ritmo costante, respira regolarmente. Scalda tutto il corpo e alza la frequenza cardiaca.</div>
-        <button class="warmup-timer-btn" onclick="toggleWarmupTimer('wjj', 30, this, document.getElementById('wt-jj'))">⏱ AVVIA <span class="warmup-timer-display" id="wt-jj">0:30</span></button>
+        <div class="warmup-timer-block">
+          <div class="warmup-timer-label">⏱ TIMER ESERCIZIO</div>
+          <span class="warmup-timer-countdown" id="wt-jj">0:30</span>
+          <div class="warmup-timer-bar-track"><div class="warmup-timer-bar-fill" id="wb-jj" style="width:100%"></div></div>
+          <button class="warmup-timer-btn" id="wbtn-jj" onclick="toggleWarmupTimer('wjj', 30, 'wt-jj', 'wb-jj', 'wbtn-jj')">▶ AVVIA TIMER</button>
+        </div>
       </div>
       <div class="warmup-ex-card">
         <div class="warmup-ex-name">Rotazioni delle braccia <span class="warmup-ex-qty">10 ripetizioni</span></div>
@@ -865,7 +898,12 @@ body {
       <div class="warmup-ex-card">
         <div class="warmup-ex-name">Corsa sul posto <span class="warmup-ex-qty">20 secondi</span></div>
         <div class="warmup-ex-desc">Corri sul posto a <strong>ritmo moderato</strong> (non al massimo come nell'allenamento). Solleva le ginocchia all'altezza dei fianchi, braccia che dondolano naturalmente. Serve a portare sangue ai muscoli delle gambe e completare il riscaldamento cardiovascolare. Fai questo per ultimo così arrivi all'allenamento già caldo.</div>
-        <button class="warmup-timer-btn" onclick="toggleWarmupTimer('wcrs', 20, this, document.getElementById('wt-crs'))">⏱ AVVIA <span class="warmup-timer-display" id="wt-crs">0:20</span></button>
+        <div class="warmup-timer-block">
+          <div class="warmup-timer-label">⏱ TIMER ESERCIZIO</div>
+          <span class="warmup-timer-countdown" id="wt-crs">0:20</span>
+          <div class="warmup-timer-bar-track"><div class="warmup-timer-bar-fill" id="wb-crs" style="width:100%"></div></div>
+          <button class="warmup-timer-btn" id="wbtn-crs" onclick="toggleWarmupTimer('wcrs', 20, 'wt-crs', 'wb-crs', 'wbtn-crs')">▶ AVVIA TIMER</button>
+        </div>
       </div>
     </div>
   </div>
@@ -937,7 +975,7 @@ body {
   <!-- SYNC GOOGLE SHEETS -->
   <div class="sync-section">
     <div class="sync-header">
-      <span class="sync-title">☁️ SYNC GOOGLE SHEETS</span>
+      <span class="sync-title">☁️ SYNC CLOUD (NPOINT)</span>
       <span class="sync-status" id="syncStatus">NON CONFIGURATO</span>
     </div>
     <div class="sync-body">
@@ -1151,22 +1189,37 @@ function toggleExTimer(eKey, totalSec) {
 }
 
 let warmupTimers = {};
-function toggleWarmupTimer(id, totalSec, btnEl, displayEl) {
+function toggleWarmupTimer(id, totalSec, cdId, barId, btnId) {
+  const cd = document.getElementById(cdId);
+  const bar = document.getElementById(barId);
+  const btn = document.getElementById(btnId);
   if (warmupTimers[id]) {
     clearInterval(warmupTimers[id]);
     delete warmupTimers[id];
-    displayEl.textContent = formatTime(totalSec);
-    btnEl.textContent = '\u23f1 AVVIA';
+    cd.textContent = formatTime(totalSec);
+    cd.classList.remove('urgent');
+    cd.style.fontSize = '';
+    if (bar) bar.style.width = '100%';
+    if (btn) btn.textContent = '▶ AVVIA TIMER';
     return;
   }
   let left = totalSec;
-  displayEl.textContent = formatTime(left);
-  btnEl.textContent = '\u23f9 STOP';
-  warmupTimers[id] = setInterval(() => {
-    left--;
-    displayEl.textContent = left <= 0 ? '\ud83c\udfc1 VIA!' : formatTime(left);
-    if (left <= 0) { clearInterval(warmupTimers[id]); delete warmupTimers[id]; btnEl.textContent = '\u21ba RICOMINCIA'; }
-  }, 1000);
+  if (btn) btn.textContent = '⏹ STOP';
+  const update = () => {
+    cd.textContent = formatTime(left);
+    cd.classList.toggle('urgent', left <= 5 && left > 0);
+    if (bar) bar.style.width = ((left / totalSec) * 100) + '%';
+    if (left <= 0) {
+      clearInterval(warmupTimers[id]);
+      delete warmupTimers[id];
+      cd.textContent = '🏁 VIA!';
+      cd.style.fontSize = '32px';
+      if (bar) bar.style.width = '0%';
+      if (btn) btn.textContent = '↺ RICOMINCIA';
+    }
+  };
+  update();
+  warmupTimers[id] = setInterval(() => { left--; update(); }, 1000);
 }
 
 function toggleWarmup() {
