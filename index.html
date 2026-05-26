@@ -42,6 +42,7 @@ body {
   background: var(--olive);
   border-bottom: 2px solid var(--khaki);
   padding: 12px 20px;
+  padding-top: max(12px, env(safe-area-inset-top));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -980,20 +981,30 @@ body {
     </div>
   </div>
 
-  <!-- SYNC GOOGLE SHEETS -->
+  <!-- BACKUP MANUALE -->
   <div class="sync-section">
     <div class="sync-header">
-      <span class="sync-title">☁️ SYNC CLOUD (NPOINT)</span>
-      <span class="sync-status" id="syncStatus">NON CONFIGURATO</span>
+      <span class="sync-title">💾 BACKUP PROGRESSO</span>
+      <span class="sync-status ok" id="syncStatus">ATTIVO</span>
     </div>
     <div class="sync-body">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-        <button class="sync-btn primary" onclick="syncNow()">↑ SALVA ORA</button>
-        <button class="sync-btn" onclick="loadFromCloud()">↓ RIPRISTINA</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+        <button class="sync-btn primary" onclick="exportBackup()">↑ ESPORTA BACKUP</button>
+        <button class="sync-btn" onclick="showImport()">↓ IMPORTA BACKUP</button>
       </div>
-      <div class="sync-log" id="syncLog">Sync automatico attivo — salva dopo ogni serie.</div>
+      <div id="exportBox" style="display:none;margin-bottom:10px;">
+        <div class="sync-note" style="margin-bottom:6px;">Copia questo codice e salvalo nelle Note di iPhone:</div>
+        <textarea id="exportText" readonly style="width:100%;height:80px;background:#0f1008;border:1px solid #4a4e2c;color:#c9b99a;font-family:'Share Tech Mono',monospace;font-size:10px;padding:8px;border-radius:2px;resize:none;"></textarea>
+        <button class="sync-btn primary" style="margin-top:6px;width:100%;" onclick="copyBackup()">📋 COPIA CODICE</button>
+      </div>
+      <div id="importBox" style="display:none;margin-bottom:10px;">
+        <div class="sync-note" style="margin-bottom:6px;">Incolla qui il codice di backup:</div>
+        <textarea id="importText" style="width:100%;height:80px;background:#0f1008;border:1px solid #4a4e2c;color:#c9b99a;font-family:'Share Tech Mono',monospace;font-size:10px;padding:8px;border-radius:2px;resize:none;" placeholder="Incolla il codice qui..."></textarea>
+        <button class="sync-btn primary" style="margin-top:6px;width:100%;" onclick="importBackup()">✓ RIPRISTINA</button>
+      </div>
+      <div class="sync-log" id="syncLog"></div>
       <div class="sync-note" style="margin-top:10px;">
-        Il progresso viene salvato automaticamente nel cloud dopo ogni serie completata. Se perdi i dati tocca RIPRISTINA.
+        Il progresso è salvato automaticamente sul tuo iPhone. Usa il backup prima di aggiornare l'app o cambiare dispositivo.
       </div>
     </div>
   </div>
@@ -1389,12 +1400,83 @@ function markDayDone() {
       state.currentWeek++;
     }
     save();
+    // Auto backup
+    autoBackupToNotes();
   }
   // Update tabs
   document.querySelectorAll('.day-tab').forEach((t, i) => t.classList.toggle('active', i === state.currentDay));
   document.getElementById('completeBanner').classList.remove('show');
   openCards = {};
   render();
+}
+
+function autoBackupToNotes() {
+  const code = btoa(JSON.stringify(state));
+  const dayNames = ['A','B','C'];
+  const w = state.currentWeek;
+  const d = dayNames[(state.currentDay + 2) % 3]; // previous day
+  const date = new Date().toLocaleDateString('it-IT');
+  const text = `BACKUP MILITARE - ${date} - Sett.${w} Giorno ${d}
+${code}`;
+  // Try to open Notes with the backup text
+  const notesUrl = 'mobilenotes://add?title=Backup%20Militare&body=' + encodeURIComponent(text);
+  const fallbackUrl = 'notes://?title=Backup%20Militare&content=' + encodeURIComponent(text);
+  // Show auto-backup banner
+  showAutoBackupBanner(code, date);
+}
+
+function showAutoBackupBanner(code, date) {
+  // Remove existing banner if any
+  const existing = document.getElementById('autoBackupBanner');
+  if (existing) existing.remove();
+
+  const banner = document.createElement('div');
+  banner.id = 'autoBackupBanner';
+  banner.style.cssText = `
+    position:fixed; bottom:0; left:0; right:0; z-index:200;
+    background:#1a1c0f; border-top:2px solid #c8401a;
+    padding:16px 20px; animation: slideUp 0.3s ease;
+  `;
+  banner.innerHTML = \`
+    <div style="font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:#f0e8d6;margin-bottom:8px;">
+      💾 BACKUP AUTOMATICO
+    </div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#8b7d5a;margin-bottom:10px;letter-spacing:1px;">
+      Allenamento completato! Salva il backup nelle Note.
+    </div>
+    <textarea id="autoBkText" readonly style="width:100%;height:60px;background:#0f1008;border:1px solid #4a4e2c;color:#c9b99a;font-family:'Share Tech Mono',monospace;font-size:9px;padding:6px;border-radius:2px;resize:none;box-sizing:border-box;">\${btoa(JSON.stringify(state))}</textarea>
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <button onclick="copyAutoBackup()" style="flex:1;background:rgba(200,64,26,0.2);border:1px solid #c8401a;color:#f0e8d6;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:10px;cursor:pointer;border-radius:2px;">
+        📋 COPIA BACKUP
+      </button>
+      <button onclick="document.getElementById('autoBackupBanner').remove()" style="background:transparent;border:1px solid #4a4e2c;color:#8b7d5a;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:10px;cursor:pointer;border-radius:2px;white-space:nowrap;">
+        CHIUDI
+      </button>
+    </div>
+    <div id="autoBkLog" style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6ab05a;margin-top:6px;min-height:14px;"></div>
+  \`;
+
+  // Add slide up animation
+  const style = document.createElement('style');
+  style.textContent = '@keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }';
+  document.head.appendChild(style);
+  document.body.appendChild(banner);
+}
+
+function copyAutoBackup() {
+  const text = document.getElementById('autoBkText');
+  text.select();
+  try {
+    navigator.clipboard.writeText(text.value).then(() => {
+      document.getElementById('autoBkLog').textContent = '✓ Copiato! Incolla nelle Note di iPhone.';
+    }).catch(() => {
+      document.execCommand('copy');
+      document.getElementById('autoBkLog').textContent = '✓ Copiato! Incolla nelle Note di iPhone.';
+    });
+  } catch(e) {
+    document.execCommand('copy');
+    document.getElementById('autoBkLog').textContent = '✓ Copiato! Incolla nelle Note di iPhone.';
+  }
 }
 
 function selectDay(day) {
@@ -1431,74 +1513,69 @@ function resetAll() {
   render();
 }
 
-// ── NPOINT SYNC ──
-const NPOINT_URL = 'https://api.npoint.io/73dc05004e76eb54ad94';
-
-function setSyncStatus(msg, cls) {
-  const el = document.getElementById('syncStatus');
-  if (!el) return;
-  el.textContent = msg;
-  el.className = 'sync-status' + (cls ? ' ' + cls : '');
-}
-
+// ── BACKUP MANUALE ──
 function setSyncLog(msg) {
   const el = document.getElementById('syncLog');
   if (el) el.textContent = msg;
 }
 
-async function syncNow() {
-  setSyncStatus('SINCRONIZZANDO...', '');
-  setSyncLog('↑ Salvataggio in corso...');
+function exportBackup() {
+  const code = btoa(JSON.stringify(state));
+  document.getElementById('exportText').value = code;
+  document.getElementById('exportBox').style.display = 'block';
+  document.getElementById('importBox').style.display = 'none';
+  setSyncLog('');
+}
+
+function copyBackup() {
+  const text = document.getElementById('exportText');
+  text.select();
   try {
-    await fetch(NPOINT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(state)
+    navigator.clipboard.writeText(text.value).then(() => {
+      setSyncLog('✓ Codice copiato! Incollalo nelle Note di iPhone.');
+    }).catch(() => {
+      document.execCommand('copy');
+      setSyncLog('✓ Codice copiato! Incollalo nelle Note di iPhone.');
     });
-    const now = new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
-    setSyncStatus('✓ SYNC ' + now, 'ok');
-    setSyncLog('✓ Progresso salvato alle ' + now);
   } catch(e) {
-    setSyncStatus('⚠ ERRORE', 'err');
-    setSyncLog('✗ Errore connessione. Riprova.');
+    document.execCommand('copy');
+    setSyncLog('✓ Codice copiato! Incollalo nelle Note di iPhone.');
   }
 }
 
-async function loadFromCloud() {
-  setSyncStatus('CARICANDO...', '');
-  setSyncLog('↓ Recupero dati...');
+function showImport() {
+  document.getElementById('importBox').style.display = 'block';
+  document.getElementById('exportBox').style.display = 'none';
+  setSyncLog('');
+}
+
+function importBackup() {
+  const code = document.getElementById('importText').value.trim();
+  if (!code) { setSyncLog('⚠ Incolla prima il codice di backup.'); return; }
   try {
-    const res = await fetch(NPOINT_URL);
-    const loaded = await res.json();
+    const loaded = JSON.parse(atob(code));
     if (loaded && loaded.version === 2) {
       state = loaded;
       try { localStorage.setItem('mil_state', JSON.stringify(state)); } catch(e){}
       openCards = {};
       render();
-      setSyncStatus('✓ RIPRISTINATO', 'ok');
-      setSyncLog('✓ Progresso ripristinato dal cloud!');
+      document.getElementById('importBox').style.display = 'none';
+      setSyncLog('✓ Progresso ripristinato correttamente!');
     } else {
-      setSyncLog('⚠ Nessun dato valido trovato.');
-      setSyncStatus('⚠ VUOTO', 'err');
+      setSyncLog('⚠ Codice non valido. Controlla di aver copiato tutto.');
     }
   } catch(e) {
-    setSyncStatus('⚠ ERRORE', 'err');
-    setSyncLog('✗ Errore connessione. Riprova.');
+    setSyncLog('⚠ Codice non valido. Controlla di aver copiato tutto.');
   }
 }
 
-// Override save: salva locale + sync automatico dopo 3 sec di inattività
 function save() {
   try { localStorage.setItem('mil_state', JSON.stringify(state)); } catch(e){}
-  clearTimeout(save._t);
-  save._t = setTimeout(syncNow, 3000);
 }
 
 // ── INIT ──
 render();
 document.querySelectorAll('.day-tab').forEach((t, i) => t.classList.toggle('active', i === state.currentDay));
-setSyncStatus('✓ CONFIGURATO', 'ok');
-setSyncLog('Sync automatico attivo — salva dopo ogni serie.');
 </script>
 
 <script>
