@@ -1426,40 +1426,58 @@ ${code}`;
 }
 
 function showAutoBackupBanner(code, date) {
-  // Remove existing banner if any
   const existing = document.getElementById('autoBackupBanner');
   if (existing) existing.remove();
 
   const banner = document.createElement('div');
   banner.id = 'autoBackupBanner';
-  banner.style.cssText = `
-    position:fixed; bottom:0; left:0; right:0; z-index:200;
-    background:#1a1c0f; border-top:2px solid #c8401a;
-    padding:16px 20px; animation: slideUp 0.3s ease;
-  `;
-  banner.innerHTML = \`
-    <div style="font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:#f0e8d6;margin-bottom:8px;">
-      💾 BACKUP AUTOMATICO
-    </div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#8b7d5a;margin-bottom:10px;letter-spacing:1px;">
-      Allenamento completato! Salva il backup nelle Note.
-    </div>
-    <textarea id="autoBkText" readonly style="width:100%;height:60px;background:#0f1008;border:1px solid #4a4e2c;color:#c9b99a;font-family:'Share Tech Mono',monospace;font-size:9px;padding:6px;border-radius:2px;resize:none;box-sizing:border-box;">\${btoa(JSON.stringify(state))}</textarea>
-    <div style="display:flex;gap:8px;margin-top:8px;">
-      <button onclick="copyAutoBackup()" style="flex:1;background:rgba(200,64,26,0.2);border:1px solid #c8401a;color:#f0e8d6;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:10px;cursor:pointer;border-radius:2px;">
-        📋 COPIA BACKUP
-      </button>
-      <button onclick="document.getElementById('autoBackupBanner').remove()" style="background:transparent;border:1px solid #4a4e2c;color:#8b7d5a;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:10px;cursor:pointer;border-radius:2px;white-space:nowrap;">
-        CHIUDI
-      </button>
-    </div>
-    <div id="autoBkLog" style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6ab05a;margin-top:6px;min-height:14px;"></div>
-  \`;
+  banner.style.position = 'fixed';
+  banner.style.bottom = '0';
+  banner.style.left = '0';
+  banner.style.right = '0';
+  banner.style.zIndex = '200';
+  banner.style.background = '#1a1c0f';
+  banner.style.borderTop = '2px solid #c8401a';
+  banner.style.padding = '16px 20px';
 
-  // Add slide up animation
-  const style = document.createElement('style');
-  style.textContent = '@keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }';
-  document.head.appendChild(style);
+  const title = document.createElement('div');
+  title.style.cssText = "font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:#f0e8d6;margin-bottom:8px;";
+  title.textContent = '💾 BACKUP AUTOMATICO';
+
+  const sub = document.createElement('div');
+  sub.style.cssText = "font-family:'Share Tech Mono',monospace;font-size:9px;color:#8b7d5a;margin-bottom:10px;letter-spacing:1px;";
+  sub.textContent = 'Allenamento completato! Copia il backup e salvalo nelle Note.';
+
+  const ta = document.createElement('textarea');
+  ta.id = 'autoBkText';
+  ta.readOnly = true;
+  ta.value = btoa(JSON.stringify(state));
+  ta.style.cssText = 'width:100%;height:60px;background:#0f1008;border:1px solid #4a4e2c;color:#c9b99a;font-family:monospace;font-size:9px;padding:6px;border-radius:2px;resize:none;box-sizing:border-box;';
+
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:8px;margin-top:8px;';
+
+  const copyBtn = document.createElement('button');
+  copyBtn.style.cssText = 'flex:1;background:rgba(200,64,26,0.2);border:1px solid #c8401a;color:#f0e8d6;font-family:monospace;font-size:10px;letter-spacing:2px;padding:10px;cursor:pointer;border-radius:2px;';
+  copyBtn.textContent = '📋 COPIA BACKUP';
+  copyBtn.onclick = copyAutoBackup;
+
+  const closeBtn = document.createElement('button');
+  closeBtn.style.cssText = 'background:transparent;border:1px solid #4a4e2c;color:#8b7d5a;font-family:monospace;font-size:10px;padding:10px;cursor:pointer;border-radius:2px;white-space:nowrap;';
+  closeBtn.textContent = 'CHIUDI';
+  closeBtn.onclick = function() { banner.remove(); };
+
+  const log = document.createElement('div');
+  log.id = 'autoBkLog';
+  log.style.cssText = "font-family:'Share Tech Mono',monospace;font-size:9px;color:#6ab05a;margin-top:6px;min-height:14px;";
+
+  btnRow.appendChild(copyBtn);
+  btnRow.appendChild(closeBtn);
+  banner.appendChild(title);
+  banner.appendChild(sub);
+  banner.appendChild(ta);
+  banner.appendChild(btnRow);
+  banner.appendChild(log);
   document.body.appendChild(banner);
 }
 
