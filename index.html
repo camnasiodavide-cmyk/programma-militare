@@ -2,8 +2,13 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI5MCIgcnk9IjkwIiBmaWxsPSIjM2Q0MjIwIi8+CiAgPHRleHQgeD0iMjU2IiB5PSIzNzAiIGZvbnQtc2l6ZT0iMzQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn5KqPC90ZXh0Pgo8L3N2Zz4=">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Militare">
+<meta name="theme-color" content="#3d4220">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Militare">
@@ -1495,6 +1500,16 @@ render();
 document.querySelectorAll('.day-tab').forEach((t, i) => t.classList.toggle('active', i === state.currentDay));
 setSyncStatus('✓ CONFIGURATO', 'ok');
 setSyncLog('Sync automatico attivo — salva dopo ogni serie.');
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('SW registered'))
+      .catch(e => console.log('SW error:', e));
+  });
+}
 </script>
 </body>
 </html>
