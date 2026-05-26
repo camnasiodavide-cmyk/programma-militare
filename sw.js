@@ -1,4 +1,4 @@
-const CACHE = 'mil-v2';
+const CACHE = 'mil-v3';
 const ASSETS = [
   '/programma-militare/',
   '/programma-militare/index.html',
