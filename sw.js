@@ -1,28 +1,25 @@
-const CACHE = 'mil-v3';
-const ASSETS = [
-  '/programma-militare/',
-  '/programma-militare/index.html',
-  '/programma-militare/manifest.json',
-  '/programma-militare/icon-192.png',
-  '/programma-militare/icon-512.png'
-];
+const CACHE = 'mil-v4';
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
   self.skipWaiting();
 });
 
 self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys =>
-    Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-  ));
+  e.waitUntil(
+    caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))))
+  );
   self.clients.claim();
 });
 
+// Network first - always try network, fallback to cache
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => 
-      caches.match('/programma-militare/index.html')
-    ))
+    fetch(e.request)
+      .then(res => {
+        const clone = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return res;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
