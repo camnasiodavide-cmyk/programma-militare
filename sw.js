@@ -1,5 +1,11 @@
-const CACHE = 'mil-v1';
-const ASSETS = ['./', './index.html', './manifest.json'];
+const CACHE = 'mil-v2';
+const ASSETS = [
+  '/programma-militare/',
+  '/programma-militare/index.html',
+  '/programma-militare/manifest.json',
+  '/programma-militare/icon-192.png',
+  '/programma-militare/icon-512.png'
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
@@ -15,6 +21,8 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => caches.match('./index.html')))
+    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => 
+      caches.match('/programma-militare/index.html')
+    ))
   );
 });
