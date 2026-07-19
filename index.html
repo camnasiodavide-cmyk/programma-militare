@@ -8,9 +8,6 @@
 <meta name="apple-mobile-web-app-title" content="Militare">
 <meta name="theme-color" content="#3d4220">
 <link rel="manifest" href="manifest.json">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Militare">
 <title>Programma Militare — Guida Interattiva</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow:wght@300;400;600;700&display=swap');
@@ -37,7 +34,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ── NAV ── */
+/* NAV */
 .nav {
   background: var(--olive);
   border-bottom: 2px solid var(--khaki);
@@ -64,7 +61,7 @@ body {
   color: var(--sand);
 }
 
-/* ── HERO ── */
+/* HERO */
 .hero {
   background: var(--olive2);
   border-bottom: 2px solid var(--khaki);
@@ -88,7 +85,7 @@ body {
   margin-top: 10px;
 }
 
-/* ── PROGRESS BAR ── */
+/* PROGRESS BAR */
 .progress-section {
   background: #1a1c0f;
   border-bottom: 1px solid var(--olive2);
@@ -124,10 +121,24 @@ body {
   border-radius: 1px;
   transition: width 0.6s cubic-bezier(.4,0,.2,1);
 }
+
+/* DOTS PROGRAMMA 2 */
+.week-dots-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+.week-dots-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--khaki);
+}
 .week-dots {
   display: flex;
   gap: 6px;
-  margin-top: 12px;
   flex-wrap: wrap;
 }
 .week-dot {
@@ -158,14 +169,71 @@ body {
   font-weight: 700;
 }
 
-/* ── MAIN LAYOUT ── */
+/* STORICO COLLASSABILE */
+.storico-section {
+  margin-top: 14px;
+  border-top: 1px solid var(--olive2);
+  padding-top: 10px;
+}
+.storico-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--olive2);
+  color: var(--khaki);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.storico-toggle-btn:hover { border-color: var(--khaki); color: var(--sand); }
+.storico-dots-wrap {
+  display: none;
+  margin-top: 10px;
+}
+.storico-dots-wrap.open { display: block; }
+.storico-prog-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--khaki);
+  margin-bottom: 6px;
+}
+.storico-dots {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.storico-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 2px;
+  border: 1px solid var(--green);
+  background: var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: white;
+  flex-shrink: 0;
+}
+.storico-dot::after { content: '✓'; font-size: 12px; }
+
+/* MAIN LAYOUT */
 .main {
   max-width: 860px;
   margin: 0 auto;
   padding: 24px 16px 80px;
 }
 
-/* ── GIORNO SELECTOR ── */
+/* GIORNO SELECTOR */
 .day-tabs {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -203,7 +271,7 @@ body {
 }
 .day-tab.active .tab-sub { color: var(--sand); }
 
-/* ── WARMUP ── */
+/* WARMUP */
 .warmup-section {
   background: var(--olive2);
   border: 1px solid var(--khaki);
@@ -304,8 +372,61 @@ body {
   font-weight: 300;
 }
 .warmup-ex-desc strong { color: var(--cream); font-weight: 600; }
+.warmup-timer-block {
+  margin-top: 10px;
+  background: rgba(200,64,26,0.08);
+  border: 1px solid rgba(200,64,26,0.3);
+  border-radius: 3px;
+  padding: 10px 14px;
+}
+.warmup-timer-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--khaki);
+  margin-bottom: 6px;
+}
+.warmup-timer-countdown {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 52px;
+  color: var(--accent);
+  letter-spacing: 4px;
+  line-height: 1;
+  text-align: center;
+  display: block;
+  margin-bottom: 8px;
+}
+.warmup-timer-countdown.urgent { color: #ff6040; animation: pulse 0.5s infinite alternate; }
+.warmup-timer-bar-track {
+  background: var(--olive2);
+  height: 6px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.warmup-timer-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #e05a2b);
+  border-radius: 2px;
+  transition: width 1s linear;
+}
+.warmup-timer-btn {
+  width: 100%;
+  background: rgba(200,64,26,0.15);
+  border: 1px solid var(--accent);
+  color: var(--cream);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+  text-align: center;
+}
+.warmup-timer-btn:hover { background: rgba(200,64,26,0.3); }
 
-/* ── EXERCISE CARDS ── */
+/* EXERCISE CARDS */
 .ex-card {
   background: #1a1c0f;
   border: 1px solid var(--olive2);
@@ -314,10 +435,7 @@ body {
   overflow: hidden;
   transition: border-color 0.2s;
 }
-.ex-card.completed {
-  border-color: var(--green);
-  opacity: 0.75;
-}
+.ex-card.completed { border-color: var(--green); opacity: 0.75; }
 .ex-card-header {
   display: flex;
   align-items: center;
@@ -344,15 +462,8 @@ body {
   color: var(--cream);
   margin-bottom: 3px;
 }
-.ex-card.completed .ex-name {
-  text-decoration: line-through;
-  color: var(--khaki);
-}
-.ex-meta {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
+.ex-card.completed .ex-name { text-decoration: line-through; color: var(--khaki); }
+.ex-meta { display: flex; gap: 12px; flex-wrap: wrap; }
 .ex-badge {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
@@ -376,11 +487,7 @@ body {
   flex-shrink: 0;
   font-size: 18px;
 }
-.ex-card.completed .ex-check {
-  background: var(--green);
-  border-color: var(--green);
-  color: white;
-}
+.ex-card.completed .ex-check { background: var(--green); border-color: var(--green); color: white; }
 .ex-card.open .ex-desc { display: block; }
 .ex-desc {
   display: none;
@@ -417,11 +524,7 @@ body {
   color: var(--khaki);
   margin-bottom: 10px;
 }
-.sets-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+.sets-row { display: flex; gap: 8px; flex-wrap: wrap; }
 .set-btn {
   width: 44px;
   height: 44px;
@@ -438,12 +541,10 @@ body {
   justify-content: center;
 }
 .set-btn:hover { border-color: var(--sand); color: var(--cream); }
-.set-btn.done {
-  background: var(--green);
-  border-color: var(--green);
-  color: white;
-}
+.set-btn.done { background: var(--green); border-color: var(--green); color: white; }
 .set-btn.done::after { content: '✓'; font-size: 16px; }
+
+/* Rest timer */
 .rest-timer-block {
   margin-top: 14px;
   background: rgba(200,64,26,0.08);
@@ -507,6 +608,8 @@ body {
   font-size: 9px;
 }
 .timer-btn.skip-btn:hover { border-color: var(--sand); color: var(--cream); }
+
+/* Ex timer */
 .ex-timer-block {
   margin: 10px 0 14px;
   background: rgba(74,124,63,0.1);
@@ -561,61 +664,8 @@ body {
   text-align: center;
 }
 .ex-timer-btn:hover { background: rgba(74,124,63,0.3); }
-.warmup-timer-block {
-  margin-top: 10px;
-  background: rgba(200,64,26,0.08);
-  border: 1px solid rgba(200,64,26,0.3);
-  border-radius: 3px;
-  padding: 10px 14px;
-}
-.warmup-timer-label {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 3px;
-  color: var(--khaki);
-  margin-bottom: 6px;
-}
-.warmup-timer-countdown {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 52px;
-  color: var(--accent);
-  letter-spacing: 4px;
-  line-height: 1;
-  text-align: center;
-  display: block;
-  margin-bottom: 8px;
-}
-.warmup-timer-countdown.urgent { color: #ff6040; animation: pulse 0.5s infinite alternate; }
-.warmup-timer-bar-track {
-  background: var(--olive2);
-  height: 6px;
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 8px;
-}
-.warmup-timer-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), #e05a2b);
-  border-radius: 2px;
-  transition: width 1s linear;
-}
-.warmup-timer-btn {
-  width: 100%;
-  background: rgba(200,64,26,0.15);
-  border: 1px solid var(--accent);
-  color: var(--cream);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  padding: 8px 14px;
-  cursor: pointer;
-  border-radius: 2px;
-  transition: all 0.2s;
-  text-align: center;
-}
-.warmup-timer-btn:hover { background: rgba(200,64,26,0.3); }
 
-/* ── COMPLETE BANNER ── */
+/* Complete banner */
 .complete-banner {
   background: var(--green);
   border-radius: 2px;
@@ -653,7 +703,7 @@ body {
   border-radius: 2px;
 }
 
-/* ── WEEK PROGRESSION ── */
+/* Progressione */
 .progression-section {
   margin-top: 32px;
   background: #1a1c0f;
@@ -678,10 +728,7 @@ body {
   color: var(--sand);
   letter-spacing: 2px;
 }
-.prog-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+.prog-table { width: 100%; border-collapse: collapse; }
 .prog-table th {
   font-family: 'Share Tech Mono', monospace;
   font-size: 9px;
@@ -703,12 +750,10 @@ body {
   color: var(--khaki);
 }
 .prog-table tr:last-child td { border-bottom: none; }
-.prog-curr {
-  color: var(--accent) !important;
-  font-weight: 700;
-}
+.prog-curr { color: var(--accent) !important; font-weight: 700; }
+.prog-done { color: var(--green) !important; opacity: 0.7; }
 
-/* ── TIPS ── */
+/* Tips */
 .tips-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -730,13 +775,9 @@ body {
   color: var(--khaki);
   margin-bottom: 5px;
 }
-.tip-text {
-  font-size: 13px;
-  color: var(--sand);
-  line-height: 1.5;
-}
+.tip-text { font-size: 13px; color: var(--sand); line-height: 1.5; }
 
-/* ── RESET BTN ── */
+/* Reset */
 .reset-btn {
   display: block;
   margin: 12px auto 0;
@@ -753,7 +794,7 @@ body {
 }
 .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-/* ── SYNC ── */
+/* Sync */
 .sync-section {
   margin-top: 32px;
   background: #1a1c0f;
@@ -776,36 +817,9 @@ body {
   letter-spacing: 2px;
   color: var(--cream);
 }
-.sync-status {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 1px;
-  color: var(--sand);
-}
+.sync-status { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--sand); }
 .sync-status.ok { color: #6ab05a; }
-.sync-status.err { color: var(--accent); }
-.sync-body {
-  padding: 16px 18px;
-}
-.sync-url-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
-.sync-input {
-  flex: 1;
-  background: #0f1008;
-  border: 1px solid var(--olive2);
-  color: var(--cream);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  padding: 8px 12px;
-  border-radius: 2px;
-  min-width: 0;
-}
-.sync-input:focus { outline: none; border-color: var(--khaki); }
-.sync-input::placeholder { color: var(--khaki); opacity: 0.6; }
+.sync-body { padding: 16px 18px; }
 .sync-btn {
   background: var(--olive2);
   border: 1px solid var(--khaki);
@@ -820,11 +834,7 @@ body {
   white-space: nowrap;
 }
 .sync-btn:hover { background: var(--olive); border-color: var(--sand); }
-.sync-btn.primary {
-  background: rgba(200,64,26,0.2);
-  border-color: var(--accent);
-  color: var(--cream);
-}
+.sync-btn.primary { background: rgba(200,64,26,0.2); border-color: var(--accent); color: var(--cream); }
 .sync-btn.primary:hover { background: rgba(200,64,26,0.35); }
 .sync-note {
   font-family: 'Share Tech Mono', monospace;
@@ -833,7 +843,6 @@ body {
   color: var(--khaki);
   line-height: 1.6;
 }
-.sync-note a { color: var(--sand); }
 .sync-log {
   margin-top: 10px;
   font-family: 'Share Tech Mono', monospace;
@@ -864,7 +873,24 @@ body {
   <div class="progress-track">
     <div class="progress-fill" id="progressFill" style="width:0%"></div>
   </div>
+
+  <!-- Dots programma corrente (2) -->
+  <div class="week-dots-header">
+    <div class="week-dots-label">PROGRAMMA 2 — SETT. 9–16</div>
+  </div>
   <div class="week-dots" id="weekDots"></div>
+
+  <!-- Storico programma 1 collassabile -->
+  <div class="storico-section">
+    <button class="storico-toggle-btn" onclick="toggleStorico()">
+      <span>📁 STORICO — PROGRAMMA 1 (SETT. 1–8)</span>
+      <span id="storicoArrow">▼</span>
+    </button>
+    <div class="storico-dots-wrap" id="storicoDots">
+      <div class="storico-prog-label" style="margin-top:10px;">24 SESSIONI COMPLETATE</div>
+      <div class="storico-dots" id="storicoDotsList"></div>
+    </div>
+  </div>
 </div>
 
 <!-- MAIN -->
@@ -888,7 +914,7 @@ body {
     <div class="warmup-cards" id="warmupCards">
       <div class="warmup-ex-card">
         <div class="warmup-ex-name">Jumping Jack <span class="warmup-ex-qty">30 secondi</span></div>
-        <div class="warmup-ex-desc">Parti in piedi con i piedi uniti e le braccia lungo i fianchi. <strong>Salta aprendo gambe e braccia contemporaneamente</strong> (gambe oltre la larghezza delle spalle, braccia sopra la testa). Risalta riportando tutto in posizione iniziale. Ritmo costante, respira regolarmente. Scalda tutto il corpo e alza la frequenza cardiaca.</div>
+        <div class="warmup-ex-desc">Parti in piedi con i piedi uniti e le braccia lungo i fianchi. <strong>Salta aprendo gambe e braccia contemporaneamente</strong> (gambe oltre la larghezza delle spalle, braccia sopra la testa). Risalta riportando tutto in posizione iniziale. Ritmo costante, respira regolarmente.</div>
         <div class="warmup-timer-block">
           <div class="warmup-timer-label">⏱ TIMER ESERCIZIO</div>
           <span class="warmup-timer-countdown" id="wt-jj">0:30</span>
@@ -898,15 +924,15 @@ body {
       </div>
       <div class="warmup-ex-card">
         <div class="warmup-ex-name">Rotazioni delle braccia <span class="warmup-ex-qty">10 ripetizioni</span></div>
-        <div class="warmup-ex-desc">In piedi, braccia tese ai lati all'altezza delle spalle. <strong>Ruota le braccia in cerchi ampi</strong> — prima 10 giri in avanti, poi 10 all'indietro. Aumenta il diametro del cerchio progressivamente. Scioglie le spalle e prepara le articolazioni per push-up e dip.</div>
+        <div class="warmup-ex-desc">In piedi, braccia tese ai lati all'altezza delle spalle. <strong>Ruota le braccia in cerchi ampi</strong> — prima 10 giri in avanti, poi 10 all'indietro. Scioglie le spalle e prepara le articolazioni per push-up e dip.</div>
       </div>
       <div class="warmup-ex-card">
         <div class="warmup-ex-name">Squat lenti <span class="warmup-ex-qty">10 ripetizioni</span></div>
-        <div class="warmup-ex-desc">Piedi a larghezza spalle, punte leggermente aperte. Scendi <strong>lentamente contando 3 secondi</strong>, tieni 1 secondo in basso, risali in 2 secondi. Non rimbalzare in basso. L'obiettivo non è la forza ma <strong>scaldare ginocchia, anche e caviglie</strong> e migliorare la mobilità prima degli squat veri.</div>
+        <div class="warmup-ex-desc">Piedi a larghezza spalle, punte leggermente aperte. Scendi <strong>lentamente contando 3 secondi</strong>, tieni 1 secondo in basso, risali in 2 secondi. L'obiettivo è <strong>scaldare ginocchia, anche e caviglie</strong>.</div>
       </div>
       <div class="warmup-ex-card">
         <div class="warmup-ex-name">Corsa sul posto <span class="warmup-ex-qty">20 secondi</span></div>
-        <div class="warmup-ex-desc">Corri sul posto a <strong>ritmo moderato</strong> (non al massimo come nell'allenamento). Solleva le ginocchia all'altezza dei fianchi, braccia che dondolano naturalmente. Serve a portare sangue ai muscoli delle gambe e completare il riscaldamento cardiovascolare. Fai questo per ultimo così arrivi all'allenamento già caldo.</div>
+        <div class="warmup-ex-desc">Corri sul posto a <strong>ritmo moderato</strong>. Solleva le ginocchia all'altezza dei fianchi, braccia che dondolano naturalmente. Porta sangue ai muscoli e completa il riscaldamento cardiovascolare.</div>
         <div class="warmup-timer-block">
           <div class="warmup-timer-label">⏱ TIMER ESERCIZIO</div>
           <span class="warmup-timer-countdown" id="wt-crs">0:20</span>
@@ -921,15 +947,15 @@ body {
   <div class="day-tabs">
     <button class="day-tab active" onclick="selectDay(0)">
       GIORNO A
-      <span class="tab-sub">SPINTA + CORE</span>
+      <span class="tab-sub">PETTO + BRACCIA + CORE</span>
     </button>
     <button class="day-tab" onclick="selectDay(1)">
       GIORNO B
-      <span class="tab-sub">TRAZIONE + GAMBE</span>
+      <span class="tab-sub">SCHIENA + GAMBE</span>
     </button>
     <button class="day-tab" onclick="selectDay(2)">
       GIORNO C
-      <span class="tab-sub">TOTALE CORPO</span>
+      <span class="tab-sub">TOTALE + ADDOME</span>
     </button>
   </div>
 
@@ -944,18 +970,18 @@ body {
   </div>
 
   <!-- PROGRESSIONE TABELLA -->
-  <div class="progression-section" style="margin-top:32px;">
+  <div class="progression-section">
     <div class="prog-header">
       <span>PROGRESSIONE SETTIMANALE</span>
-      <span class="prog-week-label" id="progWeekLabel">SETTIMANA 1 / 8</span>
+      <span class="prog-week-label" id="progWeekLabel">SETTIMANA 9 / 16</span>
     </div>
     <table class="prog-table">
       <thead>
         <tr>
           <th>Settimana</th>
-          <th>Rip. base</th>
-          <th>Volume</th>
+          <th>Serie</th>
           <th>Fase</th>
+          <th>Stato</th>
         </tr>
       </thead>
       <tbody id="progBody"></tbody>
@@ -981,7 +1007,7 @@ body {
     </div>
   </div>
 
-  <!-- BACKUP MANUALE -->
+  <!-- BACKUP -->
   <div class="sync-section">
     <div class="sync-header">
       <span class="sync-title">💾 BACKUP PROGRESSO</span>
@@ -1003,105 +1029,191 @@ body {
         <button class="sync-btn primary" style="margin-top:6px;width:100%;" onclick="importBackup()">✓ RIPRISTINA</button>
       </div>
       <div class="sync-log" id="syncLog"></div>
-      <div class="sync-note" style="margin-top:10px;">
-        Il progresso è salvato automaticamente sul tuo iPhone. Usa il backup prima di aggiornare l'app o cambiare dispositivo.
-      </div>
+      <div class="sync-note" style="margin-top:10px;">Il progresso è salvato automaticamente. Usa il backup prima di aggiornare l'app o cambiare dispositivo.</div>
     </div>
   </div>
 
   <button class="reset-btn" onclick="resetAll()">↺ RESET AVANZAMENTO</button>
-
 </div>
 
 <script>
-// ── DATA ──
-const TOTAL_WEEKS = 8;
+// ── COSTANTI ──
+const WEEKS_P1 = 8;
+const WEEKS_P2 = 8;
+const TOTAL_WEEKS = WEEKS_P1 + WEEKS_P2; // 16
 const DAYS_PER_WEEK = 3;
-const TOTAL_SESSIONS = TOTAL_WEEKS * DAYS_PER_WEEK; // 24
+const SESSIONS_P1 = WEEKS_P1 * DAYS_PER_WEEK; // 24 già completate
+const SESSIONS_P2 = WEEKS_P2 * DAYS_PER_WEEK; // 24 nuove
+const TOTAL_SESSIONS = SESSIONS_P1 + SESSIONS_P2; // 48
 
+// ── PROGRAMMA 2 (settimane 9-16) ──
 const baseProgram = [
   {
     name: 'GIORNO A',
-    focus: 'Lunedì — Spinta + Core',
+    focus: 'Lunedì — Petto + Braccia + Core',
     exercises: [
-      { name: 'Push-up', sets: 3, reps: '8–10', rest: '60 sec',
-        desc: '<strong>Mani a larghezza spalle</strong>, corpo dritto dalla testa ai piedi. Scendi finché il petto sfiora quasi il pavimento, poi spingi su con forza. Non abbassare i fianchi e non alzare il sedere. Espira nella spinta, inspira nella discesa.' },
-      { name: 'Dip su sedia', sets: 3, reps: '8–10', rest: '60 sec',
-        desc: 'Metti le <strong>mani sul bordo di una sedia stabile</strong> dietro di te, gambe tese in avanti e talloni a terra. Piega i gomiti scendendo verso il basso (fino a 90°), poi spingi su raddrizzando le braccia. Allena tricipiti e parte bassa del petto.' },
-      { name: 'Plank', sets: 3, reps: '20–30 sec', rest: '45 sec',
-        desc: '<strong>Avambracci a terra</strong>, gomiti sotto le spalle, corpo perfettamente dritto dalla testa ai talloni. Contrai l\'addome e i glutei. Non abbassare i fianchi né alzare il sedere. Respira lentamente e in modo controllato per tutta la durata.' },
-      { name: 'Crunch', sets: 3, reps: '15', rest: '45 sec',
-        desc: 'Sdraiato a terra, <strong>ginocchia piegate</strong> e piedi a terra. Incrocia le braccia sul petto o mettile dietro la nuca senza tirare. Solleva <strong>solo le spalle dal pavimento</strong> contraendo l\'addome — non salire fino alle ginocchia. Ridiscendi lentamente senza appoggiare completamente la testa. La zona lombare resta sempre a contatto con il pavimento.' },
-      { name: 'Burpees', sets: 3, reps: '5', rest: '90 sec',
-        desc: 'In piedi → <strong>accovacciati con le mani a terra</strong> → gambe indietro di scatto in posizione plank → (opzionale: push-up) → riporta le gambe in avanti → <strong>salto esplosivo</strong> con braccia in alto. Esercizio completo che combina forza e cardio.' },
+      {
+        name: 'Push-up ibrido',
+        sets: 4, reps: '10–12', rest: '60 sec',
+        desc: 'Inizia ogni serie con quante <strong>push-up completi</strong> riesci (anche solo 2–3), poi termina la serie sulle <strong>ginocchia</strong> fino al numero target. Mani a larghezza spalle, corpo dritto. Ogni settimana prova ad aumentare le ripetizioni in piena estensione. Espira nella spinta, inspira nella discesa.'
+      },
+      {
+        name: 'Dip su sedia',
+        sets: 4, reps: '10–12', rest: '60 sec',
+        desc: 'Mani sul bordo di una <strong>sedia stabile</strong> dietro di te, gambe tese in avanti e talloni a terra. Piega i gomiti scendendo verso il basso fino a 90°, poi spingi su raddrizzando le braccia. <strong>Non fare rimbalzare</strong> in basso — il movimento deve essere controllato. Allena tricipiti e parte bassa del petto.'
+      },
+      {
+        name: 'Push-up diamante',
+        sets: 3, reps: '8–10', rest: '60 sec',
+        desc: 'Push-up con le mani vicine sotto il petto a formare un <strong>triangolo/diamante</strong> con pollici e indici. Isola molto i tricipiti rispetto al push-up normale. Più difficile — puoi farlo <strong>sulle ginocchia</strong> inizialmente. Il busto rimane dritto, gomiti vicini al corpo.'
+      },
+      {
+        name: 'Crunch con torsione',
+        sets: 4, reps: '15', rest: '45 sec',
+        desc: 'Sdraiato, ginocchia piegate, mani dietro la nuca con <strong>gomiti larghi</strong>. Solleva le spalle dal pavimento e ruota portando il gomito destro verso il ginocchio sinistro, poi torna e ripeti sull\'altro lato. Alternare i lati conta come una ripetizione. <strong>Non tirare il collo</strong> — il lavoro deve farlo l\'addome.'
+      },
+      {
+        name: 'Plank con tocco spalla',
+        sets: 3, reps: '10/lato', rest: '45 sec',
+        desc: 'Plank sulle mani (braccia tese). Dal centro, solleva la mano destra e <strong>tocca la spalla sinistra</strong>, poi rimetti a terra e ripeti con la sinistra. Tieni i fianchi fermi — non oscillare. Il core deve lavorare per stabilizzare. Una ripetizione = un lato.'
+      },
     ]
   },
   {
     name: 'GIORNO B',
-    focus: 'Mercoledì — Trazione + Gambe',
+    focus: 'Mercoledì — Schiena + Gambe',
     exercises: [
-      { name: 'Squat', sets: 3, reps: '15', rest: '60 sec',
-        desc: '<strong>Piedi a larghezza spalle</strong>, punte leggermente verso l\'esterno. Scendi come se ti sedessi su una sedia invisibile: ginocchia allineate con le punte, schiena dritta, peso sui talloni. Scendi fino a che le cosce sono parallele al suolo, poi spingi su.' },
-      { name: 'Affondi alternati', sets: 3, reps: '10/gamba', rest: '60 sec',
-        desc: 'In piedi, fai un <strong>passo lungo in avanti</strong> con una gamba e scendi fino a che il ginocchio posteriore sfiora il pavimento. Il ginocchio anteriore non deve superare la punta del piede. Torna in piedi e ripeti con l\'altra gamba. Mantieni il busto eretto.' },
-      { name: 'Rematore su tavolo', sets: 3, reps: '5–8', rest: '90 sec',
-        desc: 'Sdraiati sotto un tavolo robusto con il petto sotto il bordo. <strong>Gambe tese in avanti</strong> con i talloni a terra — non sotto il tavolo. Afferra il bordo con entrambe le mani a larghezza spalle. Tira il petto verso il tavolo piegando i gomiti lungo i fianchi, finché quasi lo tocchi. Ridiscendi lentamente. Il corpo resta <strong>dritto come un asse</strong> per tutta la durata. Più sei orizzontale, più è difficile.' },
-      { name: 'Bird Dog', sets: 3, reps: '12/lato', rest: '45 sec',
-        desc: 'A <strong>quattro zampe con la schiena piatta</strong> come un tavolo — non inarcata né incurvata. Estendi contemporaneamente il <strong>braccio destro in avanti</strong> e la <strong>gamba sinistra indietro</strong>, tieni 2 secondi, torna al centro. Poi braccio sinistro e gamba destra. Mantieni il core contratto per tutta la durata. Una ripetizione = un lato. Rinforza core, glutei e paravertebrali senza stressare la zona lombare.' },
-      { name: 'Mountain Climber', sets: 3, reps: '20 sec', rest: '45 sec',
-        desc: 'Parti in <strong>posizione di plank sulle mani</strong>. Porta alternativamente le ginocchia verso il petto a ritmo veloce, come se stessi scalando una parete. Tieni i fianchi fermi e stabili, non ondeggiare. Più vai veloce, più è cardio.' },
+      {
+        name: 'Rematore su tavolo',
+        sets: 4, reps: '10–12', rest: '60 sec',
+        desc: 'Sdraiati sotto un tavolo robusto con il petto sotto il bordo. <strong>Gambe tese in avanti</strong> con i talloni a terra. Afferra il bordo con entrambe le mani a larghezza spalle. Tira il petto verso il tavolo piegando i gomiti lungo i fianchi. Il corpo resta <strong>dritto come un asse</strong>. Più sei orizzontale, più è difficile.'
+      },
+      {
+        name: 'Squat bulgaro',
+        sets: 3, reps: '8/gamba', rest: '60 sec',
+        desc: 'In piedi davanti a una sedia, metti il <strong>piede posteriore sulla sedia</strong> e il piede anteriore avanti. Scendi piegando il ginocchio anteriore come uno squat su una gamba sola — il ginocchio non deve superare la punta del piede. Risali con forza. All\'inizio puoi tenerti con una mano per l\'equilibrio. Molto più intenso dello squat normale.'
+      },
+      {
+        name: 'Affondi con salto',
+        sets: 3, reps: '6/gamba', rest: '90 sec',
+        desc: 'Parti in posizione di affondo (una gamba avanti, una indietro). <strong>Salta verso l\'alto</strong> e cambia le gambe in volo, atterrando nella posizione opposta. Ammortizza l\'atterraggio piegando le ginocchia. Sviluppa potenza esplosiva. Se troppo difficile, fai affondi normali alternati.'
+      },
+      {
+        name: 'Bird Dog',
+        sets: 4, reps: '12/lato', rest: '45 sec',
+        desc: 'A <strong>quattro zampe con la schiena piatta</strong>. Estendi contemporaneamente il braccio destro in avanti e la gamba sinistra indietro, tieni 2 secondi, torna al centro. Poi braccio sinistro e gamba destra. Mantieni il <strong>core contratto</strong>. Rinforza core, glutei e paravertebrali senza stressare la zona lombare.'
+      },
+      {
+        name: 'Mountain climber lento',
+        sets: 3, reps: '30 sec', rest: '45 sec',
+        desc: 'Posizione di <strong>plank sulle mani</strong>. Porta alternativamente le ginocchia verso il petto a <strong>ritmo lento e controllato</strong> (diverso dalla versione veloce del programma 1). Concentrati sul tenere il core attivo e i fianchi stabili. Conta mentalmente il ritmo.'
+      },
     ]
   },
   {
     name: 'GIORNO C',
-    focus: 'Venerdì — Totale Corpo',
+    focus: 'Venerdì — Totale corpo + Addome',
     exercises: [
-      { name: 'Push-up', sets: 3, reps: '10', rest: '60 sec',
-        desc: '<strong>Mani a larghezza spalle</strong>, corpo dritto dalla testa ai piedi. Scendi finché il petto sfiora quasi il pavimento, poi spingi su con forza. Non abbassare i fianchi e non alzare il sedere. Espira nella spinta, inspira nella discesa.' },
-      { name: 'Squat con salto', sets: 3, reps: '8', rest: '90 sec',
-        desc: 'Come lo squat normale, ma nella fase di risalita <strong>esplodi verso l\'alto con un salto</strong>. Atterra morbido sulle punte dei piedi ammortizzando con le ginocchia, poi scendi subito di nuovo senza rimbalzare. Più intenso dello squat classico, sviluppa potenza nelle gambe.' },
-      { name: 'Plank laterale', sets: 3, reps: '20 sec/lato', rest: '45 sec',
-        desc: 'Appoggiati su un <strong>avambraccio di lato</strong>, gomito sotto la spalla. Solleva i fianchi fino ad avere il corpo in linea retta dalla testa ai piedi. L\'altra mano può stare sul fianco o sollevata. Tieni la posizione, poi cambia lato. Allena gli obliqui.' },
-      { name: 'Burpees', sets: 3, reps: '6', rest: '90 sec',
-        desc: 'In piedi → <strong>accovacciati con le mani a terra</strong> → gambe indietro di scatto in posizione plank → (opzionale: push-up) → riporta le gambe in avanti → <strong>salto esplosivo</strong> con braccia in alto. Esercizio completo che combina forza e cardio.' },
-      { name: 'Corsa sul posto intensa', sets: 3, reps: '30 sec', rest: '60 sec',
-        desc: 'Corri sul posto <strong>alzando le ginocchia più in alto possibile</strong>, almeno all\'altezza dei fianchi. Le braccia pompano in sincronia come nella corsa vera. Mantieni un ritmo sostenuto e costante per tutta la durata. Più le ginocchia salgono, più è efficace.' },
+      {
+        name: 'Push-up ibrido',
+        sets: 4, reps: '10–12', rest: '60 sec',
+        desc: 'Come nel Giorno A: inizia ogni serie con quante <strong>push-up completi</strong> riesci, poi termina sulle ginocchia. L\'obiettivo è aumentare settimana dopo settimana le ripetizioni in posizione completa. Tieni il corpo in linea dritta dalla testa ai talloni.'
+      },
+      {
+        name: 'Squat con salto',
+        sets: 3, reps: '10', rest: '90 sec',
+        desc: 'Squat normale, ma nella fase di risalita <strong>esplodi verso l\'alto</strong> con un salto. Atterra morbido sulle punte dei piedi ammortizzando con le ginocchia, poi scendi subito di nuovo senza rimbalzare. Più intenso dello squat classico, sviluppa potenza nelle gambe.'
+      },
+      {
+        name: 'Crunch bicicletta',
+        sets: 4, reps: '15/lato', rest: '45 sec',
+        desc: 'Sdraiato, mani dietro la testa, <strong>gomiti larghi</strong>. Porta il gomito destro verso il ginocchio sinistro mentre estendi la gamba destra, poi alterni. Movimento <strong>lento e controllato</strong> — non tirare il collo. Lavora su addome e obliqui insieme. Una ripetizione = un lato.'
+      },
+      {
+        name: 'Leg raise',
+        sets: 3, reps: '12', rest: '45 sec',
+        desc: 'Sdraiato a terra, braccia lungo i fianchi. <strong>Gambe tese</strong> (o leggermente piegate), sollevale insieme fino a 90° e riabbassale lentamente <strong>senza toccare terra</strong>. Lavora sull\'addome basso dove si accumula più grasso. Se troppo difficile inizialmente, piega le ginocchia.'
+      },
+      {
+        name: 'Plank laterale',
+        sets: 3, reps: '25 sec/lato', rest: '45 sec',
+        desc: 'Appoggiati su un <strong>avambraccio di lato</strong>, gomito sotto la spalla. Solleva i fianchi fino ad avere il corpo in linea retta dalla testa ai piedi. L\'altra mano può stare sul fianco o sollevata. Tieni la posizione, poi cambia lato. Allena gli obliqui.'
+      },
     ]
   }
 ];
 
-// Parse numeric reps for progression
-function parseReps(r, week) {
-  const bonus = Math.floor((week - 1) / 2);
+// ── UTILITÀ ──
+function parseReps(r, weekInP2) {
+  // Progressione ogni 2 settimane anche nel programma 2
+  const bonus = Math.floor((weekInP2 - 1) / 2);
   if (r.includes('–')) {
     const [a, b] = r.split('–').map(x => parseInt(x));
     return `${a + bonus}–${b + bonus}`;
   }
-  if (r.includes('/')) return r; // per gamba etc
+  if (r.includes('/')) return r;
   if (r.includes('sec')) return r;
   const n = parseInt(r);
   return isNaN(n) ? r : String(n + bonus);
 }
 
+function formatTime(s) {
+  if (s <= 0) return '0:00';
+  return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+}
+function parseRestSeconds(r) { const m = r.match(/(\d+)\s*sec/); return m ? parseInt(m[1]) : 60; }
+function parseExSeconds(r) {
+  const m = r.match(/(\d+)[^\d]*?(\d+)?\s*sec/);
+  if (!m) return null;
+  const a = parseInt(m[1]);
+  const b = m[2] ? parseInt(m[2]) : null;
+  return b ? Math.max(a, b) : a;
+}
+function isTimedEx(ex) { return ex.reps.includes('sec'); }
+
 // ── STATE ──
+// currentWeek va da 9 a 16 (settimane assolute)
+// completedSessions va da 24 (già completate P1) a 48
 let state = load();
 
 function load() {
   try {
     const s = JSON.parse(localStorage.getItem('mil_state') || 'null');
-    if (s && s.version === 2) return s;
+    if (s && s.version === 3) return s;
+    // Migrazione da versione 2 (programma 1 completato)
+    if (s && s.version === 2) {
+      return {
+        version: 3,
+        currentWeek: WEEKS_P1 + 1, // 9
+        completedSessions: SESSIONS_P1, // 24
+        doneSessions: s.doneSessions || {},
+        currentDay: s.currentDay || 0,
+        exState: {},
+        setsDone: {}
+      };
+    }
   } catch(e){}
+  // Fresh start — per test puoi partire da settimana 9 con 24 sessioni già fatte
   return {
-    version: 2,
-    currentWeek: 1,
-    completedSessions: 0,
-    doneSessions: {}, // "W1-D0" etc
+    version: 3,
+    currentWeek: WEEKS_P1 + 1,
+    completedSessions: SESSIONS_P1,
+    doneSessions: buildP1Done(),
     currentDay: 0,
-    // per-session exercise completion: key "W1-D0" -> [bool per exercise]
     exState: {},
-    // per-exercise open state (ephemeral, not saved)
-    setsDone: {} // "W1-D0-E0" -> [bool per set]
+    setsDone: {}
   };
+}
+
+function buildP1Done() {
+  // Segna tutte le 24 sessioni del programma 1 come completate
+  const done = {};
+  for (let w = 1; w <= WEEKS_P1; w++) {
+    for (let d = 0; d < DAYS_PER_WEEK; d++) {
+      done[`W${w}-D${d}`] = true;
+    }
+  }
+  return done;
 }
 
 function save() {
@@ -1111,23 +1223,11 @@ function save() {
 function sessionKey(week, day) { return `W${week}-D${day}`; }
 function exKey(week, day, ex) { return `W${week}-D${day}-E${ex}`; }
 
+// Settimana nel programma 2 (1-8) partendo dalla settimana assoluta (9-16)
+function weekInP2(absWeek) { return absWeek - WEEKS_P1; }
+
 // ── TIMERS ──
 let timerIntervals = {};
-
-function formatTime(s) {
-  if (s <= 0) return '0:00';
-  return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
-}
-function parseRestSeconds(r) { const m = r.match(/(\d+)\s*sec/); return m ? parseInt(m[1]) : 60; }
-function parseExSeconds(r) {
-  // handles "20 sec", "30 sec", "20–30 sec" (takes max), "20 sec/lato"
-  const m = r.match(/(\d+)[^\d]*?(\d+)?\s*sec/);
-  if (!m) return null;
-  const a = parseInt(m[1]);
-  const b = m[2] ? parseInt(m[2]) : null;
-  return b ? Math.max(a, b) : a;
-}
-function isTimedEx(ex) { return ex.reps.includes('sec'); }
 
 function startRestTimer(eKey, totalSec) {
   if (timerIntervals['rest_' + eKey]) { clearInterval(timerIntervals['rest_' + eKey]); delete timerIntervals['rest_' + eKey]; }
@@ -1138,21 +1238,20 @@ function startRestTimer(eKey, totalSec) {
   if (!countdown) return;
   const update = () => {
     countdown.textContent = formatTime(left);
-    const pct = (left / totalSec) * 100;
-    if (bar) bar.style.width = pct + '%';
+    if (bar) bar.style.width = ((left / totalSec) * 100) + '%';
     countdown.classList.toggle('urgent', left <= 5 && left > 0);
     if (left <= 0) {
       clearInterval(timerIntervals['rest_' + eKey]);
       delete timerIntervals['rest_' + eKey];
-      countdown.textContent = '\ud83c\udfc1 VIA!';
+      countdown.textContent = '🏁 VIA!';
       countdown.style.fontSize = '32px';
-      if (btn) btn.textContent = '\u21ba RICOMINCIA';
+      if (btn) btn.textContent = '↺ RICOMINCIA';
       if (bar) bar.style.width = '0%';
     }
   };
   update();
   timerIntervals['rest_' + eKey] = setInterval(() => { left--; update(); }, 1000);
-  if (btn) btn.textContent = '\u23f9 STOP';
+  if (btn) btn.textContent = '⏹ STOP';
 }
 
 function toggleRestTimer(eKey, totalSec) {
@@ -1161,7 +1260,7 @@ function toggleRestTimer(eKey, totalSec) {
   if (timerIntervals['rest_' + eKey]) {
     clearInterval(timerIntervals['rest_' + eKey]);
     delete timerIntervals['rest_' + eKey];
-    if (btn) btn.textContent = '\u25b6 AVVIA RIPOSO';
+    if (btn) btn.textContent = '▶ AVVIA RIPOSO';
     return;
   }
   if (countdown) countdown.style.fontSize = '';
@@ -1177,8 +1276,7 @@ function startExTimer(eKey, totalSec) {
   if (!countdown) return;
   const update = () => {
     countdown.textContent = formatTime(left);
-    const pct = (left / totalSec) * 100;
-    if (bar) bar.style.width = pct + '%';
+    if (bar) bar.style.width = ((left / totalSec) * 100) + '%';
     countdown.classList.toggle('urgent', left <= 5 && left > 0);
     if (left <= 0) {
       clearInterval(timerIntervals['ex_' + eKey]);
@@ -1191,7 +1289,7 @@ function startExTimer(eKey, totalSec) {
   };
   update();
   timerIntervals['ex_' + eKey] = setInterval(() => { left--; update(); }, 1000);
-  if (btn) btn.textContent = '\u23f9 STOP';
+  if (btn) btn.textContent = '⏹ STOP';
 }
 
 function toggleExTimer(eKey, totalSec) {
@@ -1200,7 +1298,7 @@ function toggleExTimer(eKey, totalSec) {
   if (timerIntervals['ex_' + eKey]) {
     clearInterval(timerIntervals['ex_' + eKey]);
     delete timerIntervals['ex_' + eKey];
-    if (btn) btn.textContent = '\u25b6 AVVIA TIMER';
+    if (btn) btn.textContent = '▶ AVVIA TIMER';
     return;
   }
   if (countdown) countdown.style.fontSize = '';
@@ -1248,6 +1346,25 @@ function toggleWarmup() {
   toggle.textContent = isOpen ? '▲ CHIUDI' : '▼ ESPANDI';
 }
 
+function toggleStorico() {
+  const wrap = document.getElementById('storicoDots');
+  const arrow = document.getElementById('storicoArrow');
+  const isOpen = wrap.classList.toggle('open');
+  arrow.textContent = isOpen ? '▲' : '▼';
+  if (isOpen) renderStoricoDots();
+}
+
+function renderStoricoDots() {
+  const container = document.getElementById('storicoDotsList');
+  container.innerHTML = '';
+  for (let i = 0; i < SESSIONS_P1; i++) {
+    const div = document.createElement('div');
+    div.className = 'storico-dot';
+    div.title = `Sett. ${Math.floor(i/3)+1}, Giorno ${['A','B','C'][i%3]}`;
+    container.appendChild(div);
+  }
+}
+
 // ── RENDER ──
 let openCards = {};
 
@@ -1261,22 +1378,24 @@ function render() {
 
 function renderWeekDots() {
   const container = document.getElementById('weekDots');
-  const total = TOTAL_SESSIONS;
   container.innerHTML = '';
-  for (let i = 0; i < total; i++) {
-    const w = Math.floor(i / DAYS_PER_WEEK) + 1;
+
+  for (let i = 0; i < SESSIONS_P2; i++) {
+    const absSessionIdx = SESSIONS_P1 + i;
+    const w = WEEKS_P1 + Math.floor(i / DAYS_PER_WEEK) + 1; // settimana assoluta 9-16
     const d = i % DAYS_PER_WEEK;
     const key = sessionKey(w, d);
     const done = !!state.doneSessions[key];
-    const isCurrent = (i === state.completedSessions);
+    const isCurrent = (absSessionIdx === state.completedSessions);
     const div = document.createElement('div');
     div.className = 'week-dot' + (done ? ' done' : '') + (isCurrent && !done ? ' active' : '');
-    if (!done) div.textContent = i + 1;
+    if (!done) div.textContent = absSessionIdx + 1;
     div.title = `Settimana ${w}, Giorno ${['A','B','C'][d]}`;
     container.appendChild(div);
   }
-  // progress
-  const pct = Math.round((state.completedSessions / total) * 100);
+
+  // Progress bar: conta tutte le sessioni (P1 + P2)
+  const pct = Math.round((state.completedSessions / TOTAL_SESSIONS) * 100);
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('pctLabel').textContent = pct + '%';
 }
@@ -1284,8 +1403,8 @@ function renderWeekDots() {
 function renderExercises() {
   const day = state.currentDay;
   const week = state.currentWeek;
+  const wp2 = weekInP2(week); // 1-8
   const prog = baseProgram[day];
-  const sKey = sessionKey(week, day);
   const container = document.getElementById('exerciseList');
   container.innerHTML = '';
 
@@ -1297,13 +1416,11 @@ function renderExercises() {
     const card = document.createElement('div');
     card.className = 'ex-card' + (allSetsDone ? ' completed' : '') + (openCards[eKey] ? ' open' : '');
 
-    const repsDisplay = parseReps(ex.reps, week);
-
+    const repsDisplay = parseReps(ex.reps, wp2);
     const timed = isTimedEx(ex);
     const exSec = timed ? parseExSeconds(ex.reps) : null;
     const restSec = parseRestSeconds(ex.rest);
     const repLabel = timed ? repsDisplay : repsDisplay + ' RIP.';
-    const repBadgeExtra = timed ? ' accent' : ' accent';
 
     card.innerHTML = `
       <div class="ex-card-header" onclick="toggleCard('${eKey}', this)">
@@ -1346,12 +1463,11 @@ function renderExercises() {
           <div class="rest-timer-bar-track"><div class="rest-timer-bar-fill" id="rest-bar-${eKey}" style="width:100%"></div></div>
           <div class="rest-timer-btns">
             <button class="timer-btn" id="rest-btn-${eKey}" onclick="toggleRestTimer('${eKey}', ${restSec})">▶ AVVIA RIPOSO</button>
-            <button class="timer-btn skip-btn" onclick="document.getElementById('rest-cd-${eKey}').textContent='🏁 VIA!'; if(timerIntervals['rest_${eKey}']){clearInterval(timerIntervals['rest_${eKey}']);delete timerIntervals['rest_${eKey}'];}">SALTA</button>
+            <button class="timer-btn skip-btn" onclick="(function(){var c=document.getElementById('rest-cd-${eKey}');c.textContent='🏁 VIA!';if(timerIntervals['rest_${eKey}']){clearInterval(timerIntervals['rest_${eKey}']);delete timerIntervals['rest_${eKey}'];}})()">SALTA</button>
           </div>
         </div>
       </div>
     `;
-
     container.appendChild(card);
   });
 
@@ -1382,7 +1498,7 @@ function checkAllDone() {
   const banner = document.getElementById('completeBanner');
   if (allDone) {
     banner.classList.add('show');
-    const dayNames = ['A (Spinta + Core)', 'B (Trazione + Gambe)', 'C (Totale Corpo)'];
+    const dayNames = ['A (Petto + Braccia + Core)', 'B (Schiena + Gambe)', 'C (Totale + Addome)'];
     document.getElementById('completeMsg').textContent = `GIORNO ${dayNames[day]} — SETTIMANA ${week} COMPLETATA!`;
   } else {
     banner.classList.remove('show');
@@ -1394,106 +1510,36 @@ function markDayDone() {
   if (!state.doneSessions[key]) {
     state.doneSessions[key] = true;
     state.completedSessions = Math.min(state.completedSessions + 1, TOTAL_SESSIONS);
-    // Advance week/day
+    // Avanza giorno/settimana
     state.currentDay = (state.currentDay + 1) % 3;
     if (state.currentDay === 0 && state.currentWeek < TOTAL_WEEKS) {
       state.currentWeek++;
     }
     save();
-    // Auto backup
-    autoBackupToNotes();
+    showAutoBackupBanner();
   }
-  // Update tabs
   document.querySelectorAll('.day-tab').forEach((t, i) => t.classList.toggle('active', i === state.currentDay));
   document.getElementById('completeBanner').classList.remove('show');
   openCards = {};
   render();
 }
 
-function autoBackupToNotes() {
-  const code = btoa(JSON.stringify(state));
-  const dayNames = ['A','B','C'];
-  const w = state.currentWeek;
-  const d = dayNames[(state.currentDay + 2) % 3]; // previous day
-  const date = new Date().toLocaleDateString('it-IT');
-  const text = `BACKUP MILITARE - ${date} - Sett.${w} Giorno ${d}
-${code}`;
-  // Try to open Notes with the backup text
-  const notesUrl = 'mobilenotes://add?title=Backup%20Militare&body=' + encodeURIComponent(text);
-  const fallbackUrl = 'notes://?title=Backup%20Militare&content=' + encodeURIComponent(text);
-  // Show auto-backup banner
-  showAutoBackupBanner(code, date);
-}
-
-function showAutoBackupBanner(code, date) {
-  const existing = document.getElementById('autoBackupBanner');
-  if (existing) existing.remove();
-
-  const banner = document.createElement('div');
-  banner.id = 'autoBackupBanner';
-  banner.style.position = 'fixed';
-  banner.style.bottom = '0';
-  banner.style.left = '0';
-  banner.style.right = '0';
-  banner.style.zIndex = '200';
-  banner.style.background = '#1a1c0f';
-  banner.style.borderTop = '2px solid #c8401a';
-  banner.style.padding = '16px 20px';
-
-  const title = document.createElement('div');
-  title.style.cssText = "font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:#f0e8d6;margin-bottom:8px;";
-  title.textContent = '💾 BACKUP AUTOMATICO';
-
-  const sub = document.createElement('div');
-  sub.style.cssText = "font-family:'Share Tech Mono',monospace;font-size:9px;color:#8b7d5a;margin-bottom:10px;letter-spacing:1px;";
-  sub.textContent = 'Allenamento completato! Copia il backup e salvalo nelle Note.';
-
-  const ta = document.createElement('textarea');
-  ta.id = 'autoBkText';
-  ta.readOnly = true;
-  ta.value = btoa(JSON.stringify(state));
-  ta.style.cssText = 'width:100%;height:60px;background:#0f1008;border:1px solid #4a4e2c;color:#c9b99a;font-family:monospace;font-size:9px;padding:6px;border-radius:2px;resize:none;box-sizing:border-box;';
-
-  const btnRow = document.createElement('div');
-  btnRow.style.cssText = 'display:flex;gap:8px;margin-top:8px;';
-
-  const copyBtn = document.createElement('button');
-  copyBtn.style.cssText = 'flex:1;background:rgba(200,64,26,0.2);border:1px solid #c8401a;color:#f0e8d6;font-family:monospace;font-size:10px;letter-spacing:2px;padding:10px;cursor:pointer;border-radius:2px;';
-  copyBtn.textContent = '📋 COPIA BACKUP';
-  copyBtn.onclick = copyAutoBackup;
-
-  const closeBtn = document.createElement('button');
-  closeBtn.style.cssText = 'background:transparent;border:1px solid #4a4e2c;color:#8b7d5a;font-family:monospace;font-size:10px;padding:10px;cursor:pointer;border-radius:2px;white-space:nowrap;';
-  closeBtn.textContent = 'CHIUDI';
-  closeBtn.onclick = function() { banner.remove(); };
-
-  const log = document.createElement('div');
-  log.id = 'autoBkLog';
-  log.style.cssText = "font-family:'Share Tech Mono',monospace;font-size:9px;color:#6ab05a;margin-top:6px;min-height:14px;";
-
-  btnRow.appendChild(copyBtn);
-  btnRow.appendChild(closeBtn);
-  banner.appendChild(title);
-  banner.appendChild(sub);
-  banner.appendChild(ta);
-  banner.appendChild(btnRow);
-  banner.appendChild(log);
-  document.body.appendChild(banner);
-}
-
-function copyAutoBackup() {
-  const text = document.getElementById('autoBkText');
-  text.select();
-  try {
-    navigator.clipboard.writeText(text.value).then(() => {
-      document.getElementById('autoBkLog').textContent = '✓ Copiato! Incolla nelle Note di iPhone.';
-    }).catch(() => {
-      document.execCommand('copy');
-      document.getElementById('autoBkLog').textContent = '✓ Copiato! Incolla nelle Note di iPhone.';
-    });
-  } catch(e) {
-    document.execCommand('copy');
-    document.getElementById('autoBkLog').textContent = '✓ Copiato! Incolla nelle Note di iPhone.';
+function renderProgression() {
+  const body = document.getElementById('progBody');
+  body.innerHTML = '';
+  const phases = ['ADATTAMENTO','ADATTAMENTO','SVILUPPO','SVILUPPO','INTENSITÀ','INTENSITÀ','PICCO','PICCO'];
+  for (let w = WEEKS_P1 + 1; w <= TOTAL_WEEKS; w++) {
+    const isCurr = w === state.currentWeek;
+    const isDone = w < state.currentWeek;
+    const wp2 = weekInP2(w);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="${isCurr ? 'prog-curr' : isDone ? 'prog-done' : ''}">SETTIMANA ${w}${isCurr ? ' ◀' : isDone ? ' ✓' : ''}</td>
+      <td>4 serie</td>
+      <td>${phases[wp2-1]}</td>
+      <td class="${isDone ? 'prog-done' : isCurr ? 'prog-curr' : ''}">${isDone ? 'COMPLETATA' : isCurr ? 'IN CORSO' : '—'}</td>
+    `;
+    body.appendChild(tr);
   }
 }
 
@@ -1504,42 +1550,56 @@ function selectDay(day) {
   renderExercises();
 }
 
-function renderProgression() {
-  const body = document.getElementById('progBody');
-  body.innerHTML = '';
-  const phases = ['BASE','BASE','SVILUPPO','SVILUPPO','INTENSITÀ','INTENSITÀ','PICCO','PICCO'];
-  for (let w = 1; w <= TOTAL_WEEKS; w++) {
-    const bonus = Math.floor((w - 1) / 2);
-    const vol = 3 * (15 + bonus) + 3 * (8 + bonus) + 3 * (5 + bonus);
-    const isCurr = w === state.currentWeek;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td class="${isCurr ? 'prog-curr' : ''}">SETTIMANA ${w}${isCurr ? ' ◀' : ''}</td>
-      <td>+${bonus} rip.</td>
-      <td>~${vol} rip. tot.</td>
-      <td>${phases[w-1]}</td>
-    `;
-    body.appendChild(tr);
-  }
-}
-
 function resetAll() {
-  if (!confirm('Sei sicuro di voler azzerare tutto il progresso?')) return;
-  localStorage.removeItem('mil_state');
-  state = load();
+  if (!confirm('Sei sicuro di voler azzerare tutto il progresso del programma 2?')) return;
+  state = {
+    version: 3,
+    currentWeek: WEEKS_P1 + 1,
+    completedSessions: SESSIONS_P1,
+    doneSessions: buildP1Done(),
+    currentDay: 0,
+    exState: {},
+    setsDone: {}
+  };
+  save();
   openCards = {};
   render();
 }
 
-// ── BACKUP MANUALE ──
-function setSyncLog(msg) {
-  const el = document.getElementById('syncLog');
-  if (el) el.textContent = msg;
+// ── BACKUP ──
+function showAutoBackupBanner() {
+  const existing = document.getElementById('autoBackupBanner');
+  if (existing) existing.remove();
+  const banner = document.createElement('div');
+  banner.id = 'autoBackupBanner';
+  banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:200;background:#1a1c0f;border-top:2px solid #c8401a;padding:16px 20px;';
+  banner.innerHTML = `
+    <div style="font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:#f0e8d6;margin-bottom:8px;">💾 BACKUP AUTOMATICO</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#8b7d5a;margin-bottom:10px;letter-spacing:1px;">Allenamento completato! Copia il backup e salvalo nelle Note.</div>
+    <textarea id="autoBkText" readonly style="width:100%;height:60px;background:#0f1008;border:1px solid #4a4e2c;color:#c9b99a;font-family:monospace;font-size:9px;padding:6px;border-radius:2px;resize:none;box-sizing:border-box;">${btoa(JSON.stringify(state))}</textarea>
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <button onclick="copyAutoBackup()" style="flex:1;background:rgba(200,64,26,0.2);border:1px solid #c8401a;color:#f0e8d6;font-family:monospace;font-size:10px;letter-spacing:2px;padding:10px;cursor:pointer;border-radius:2px;">📋 COPIA BACKUP</button>
+      <button onclick="document.getElementById('autoBackupBanner').remove()" style="background:transparent;border:1px solid #4a4e2c;color:#8b7d5a;font-family:monospace;font-size:10px;padding:10px;cursor:pointer;border-radius:2px;white-space:nowrap;">CHIUDI</button>
+    </div>
+    <div id="autoBkLog" style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6ab05a;margin-top:6px;min-height:14px;"></div>
+  `;
+  document.body.appendChild(banner);
 }
 
+function copyAutoBackup() {
+  const text = document.getElementById('autoBkText');
+  text.select();
+  navigator.clipboard.writeText(text.value).then(() => {
+    document.getElementById('autoBkLog').textContent = '✓ Copiato! Incolla nelle Note di iPhone.';
+  }).catch(() => {
+    try { document.execCommand('copy'); document.getElementById('autoBkLog').textContent = '✓ Copiato!'; } catch(e){}
+  });
+}
+
+function setSyncLog(msg) { const el = document.getElementById('syncLog'); if (el) el.textContent = msg; }
+
 function exportBackup() {
-  const code = btoa(JSON.stringify(state));
-  document.getElementById('exportText').value = code;
+  document.getElementById('exportText').value = btoa(JSON.stringify(state));
   document.getElementById('exportBox').style.display = 'block';
   document.getElementById('importBox').style.display = 'none';
   setSyncLog('');
@@ -1548,17 +1608,9 @@ function exportBackup() {
 function copyBackup() {
   const text = document.getElementById('exportText');
   text.select();
-  try {
-    navigator.clipboard.writeText(text.value).then(() => {
-      setSyncLog('✓ Codice copiato! Incollalo nelle Note di iPhone.');
-    }).catch(() => {
-      document.execCommand('copy');
-      setSyncLog('✓ Codice copiato! Incollalo nelle Note di iPhone.');
-    });
-  } catch(e) {
-    document.execCommand('copy');
+  navigator.clipboard.writeText(text.value).then(() => {
     setSyncLog('✓ Codice copiato! Incollalo nelle Note di iPhone.');
-  }
+  }).catch(() => { try { document.execCommand('copy'); setSyncLog('✓ Copiato!'); } catch(e){} });
 }
 
 function showImport() {
@@ -1572,9 +1624,15 @@ function importBackup() {
   if (!code) { setSyncLog('⚠ Incolla prima il codice di backup.'); return; }
   try {
     const loaded = JSON.parse(atob(code));
-    if (loaded && loaded.version === 2) {
+    if (loaded && (loaded.version === 3 || loaded.version === 2)) {
+      if (loaded.version === 2) {
+        loaded.version = 3;
+        loaded.currentWeek = WEEKS_P1 + 1;
+        loaded.completedSessions = SESSIONS_P1;
+        if (!loaded.doneSessions) loaded.doneSessions = buildP1Done();
+      }
       state = loaded;
-      try { localStorage.setItem('mil_state', JSON.stringify(state)); } catch(e){}
+      save();
       openCards = {};
       render();
       document.getElementById('importBox').style.display = 'none';
@@ -1585,10 +1643,6 @@ function importBackup() {
   } catch(e) {
     setSyncLog('⚠ Codice non valido. Controlla di aver copiato tutto.');
   }
-}
-
-function save() {
-  try { localStorage.setItem('mil_state', JSON.stringify(state)); } catch(e){}
 }
 
 // ── INIT ──
