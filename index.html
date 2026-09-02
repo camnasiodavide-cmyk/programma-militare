@@ -24,7 +24,7 @@
 <section class="session-timer" id="sessionTimer"><div><div class="st-label">TEMPO ALLENAMENTO</div><div class="st-time" id="sessionTime">00:00</div></div><div class="st-state" id="sessionState">PARTE CON IL RISCALDAMENTO</div></section>
 <section class="week-status"><div class="row"><div><b>Questa settimana</b><div class="sub" id="weekStatusLabel">Settimana 12 · 2/3 allenamenti completati</div></div><div class="session-count" id="sessionCount">35/48 sessioni</div></div><div class="status-grid" id="statusGrid"><div class="status-chip done"><b>✓</b><span>A · COMPLETATO</span></div><div class="status-chip done"><b>✓</b><span>B · COMPLETATO</span></div><div class="status-chip"><b>C</b><span>C · DA FARE</span></div></div></section>
 <section class="history-card"><div class="history-meta"><div><b>Avanzamento settimane</b><div class="sub">Storico 1–16</div></div><div class="small" id="historySummary">11 settimane complete · settimana 12: 2/3</div></div><div class="history-grid" id="historyGrid"><div class="week-dot done">1✓</div><div class="week-dot done">2✓</div><div class="week-dot done">3✓</div><div class="week-dot done">4✓</div><div class="week-dot done">5✓</div><div class="week-dot done">6✓</div><div class="week-dot done">7✓</div><div class="week-dot done">8✓</div><div class="week-dot done">9✓</div><div class="week-dot done">10✓</div><div class="week-dot done">11✓</div><div class="week-dot active">12</div><div class="week-dot">13</div><div class="week-dot">14</div><div class="week-dot">15</div><div class="week-dot">16</div></div></section>
-<section class="warmup" id="warmup"><div class="warmup-head row" onclick="toggleWarmup()"><div><strong>Riscaldamento</strong><div class="sub">≈ 4 minuti · prima di ogni sessione</div></div><span>⌄</span></div><div class="warmup-body"><div class="warm-grid" id="warmGrid"></div></div></section>
+<section class="warmup" id="warmup"><div class="warmup-head row" onclick="toggleWarmup()"><div><strong>Riscaldamento</strong><div class="sub">≈ 2:30 minuti · prima di ogni sessione</div></div><span>⌄</span></div><div class="warmup-body"><div class="warm-grid" id="warmGrid"></div></div></section>
 <div class="days"><button class="day" onclick="selectDay(0)">A<small>PETTO · BRACCIA</small></button><button class="day" onclick="selectDay(1)">B<small>SCHIENA · GAMBE</small></button><button class="day" onclick="selectDay(2)">C<small>FULL BODY</small></button></div>
 <div class="section-title" id="dayTitle">GIORNO C · Venerdì — Totale corpo + Addome</div><div id="exerciseList">
 <section class="exercise"><div class="ex-head row"><div class="ex-index">1</div><div class="ex-title-wrap"><div class="ex-name">Push-up ibrido</div><div class="meta"><span class="badge">4 SERIE</span><span class="badge accent">10–12</span><span class="badge">REC 45s</span></div></div></div></section>
@@ -39,11 +39,11 @@
 <script>
 const WEEKS_P1=8,TOTAL_WEEKS=16,DAYS=3,SESSIONS_P1=24,TOTAL_SESSIONS=48;
 const warmup=[
- {name:'Marcia / corsa sul posto',qty:'60 sec',sec:60,desc:'Parti a ritmo facile e aumenta gradualmente. Braccia naturali, appoggi morbidi: devi scaldarti, non arrivare affaticato.'},
- {name:'Circonduzioni braccia',qty:'30 sec avanti + 30 sec indietro',sec:60,desc:'Braccia distese lateralmente. Parti con cerchi piccoli e aumenta l’ampiezza senza forzare le spalle.'},
- {name:'Squat controllato',qty:'45 sec',sec:45,desc:'Piedi circa larghezza spalle. Scendi in modo fluido e controllato, ginocchia nella direzione delle punte, poi risali senza salto.'},
- {name:'Cat-cow dolce',qty:'45 sec',sec:45,desc:'A quattro zampe, alterna lentamente una lieve estensione e flessione della colonna. Movimento comodo: non cercare la massima escursione.'},
- {name:'Scapular push-up',qty:'45 sec',sec:45,desc:'Posizione push-up con gomiti tesi. Lascia avvicinare leggermente le scapole, poi spingi il pavimento allontanandole. Il movimento viene dalle scapole, non dai gomiti.'}
+ {name:'Marcia / corsa sul posto',qty:'45 sec',sec:45,desc:'Parti a ritmo facile e aumenta gradualmente. Braccia naturali, appoggi morbidi: devi scaldarti, non arrivare affaticato.'},
+ {name:'Circonduzioni braccia',qty:'15 sec avanti + 15 sec indietro',sec:30,desc:'Braccia distese lateralmente. Cerchi fluidi e controllati, senza cercare velocità o affaticare le spalle.'},
+ {name:'Squat controllato',qty:'30 sec',sec:30,desc:'Piedi circa larghezza spalle. Scendi in modo fluido e controllato, ginocchia nella direzione delle punte, poi risali senza salto.'},
+ {name:'Cat-cow dolce',qty:'30 sec',sec:30,desc:'A quattro zampe, alterna lentamente una lieve estensione e flessione della colonna. Movimento comodo: non cercare la massima escursione.'},
+ {name:'Scapular push-up',qty:'15 sec',sec:15,desc:'Breve attivazione delle scapole, non una serie di allenamento. Gomiti tesi: lascia avvicinare leggermente le scapole e poi spingi il pavimento allontanandole. Fermati prima di sentire affaticamento alle braccia.'}
 ];
 const legacyProgram=[
  {name:'GIORNO A',focus:'Petto + Braccia + Core',exercises:[
