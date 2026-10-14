@@ -107,13 +107,31 @@ if(!s.week18DateAligned && new Date() >= new Date(2026,9,12) && s.currentWeek<=1
 return s}}catch(e){}const f=fresh();if(new Date()>=new Date(2026,9,12)){f.currentWeek=18;f.currentDay=0;f.week18DateAligned=true;}return f}
 let state=load(),timers={},openCards={},sessionStartedAt=null,sessionTicker=null,sessionElapsed=0;
 let wakeLock=null;
+let wakeLockPending=false;
 async function keepScreenAwake(){
- if(!('wakeLock' in navigator)||document.visibilityState!=='visible')return;
- try{if(!wakeLock){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null;});}}
- catch(e){console.log('Wake Lock non disponibile:',e);}
+ if(document.visibilityState!=='visible'||!('wakeLock' in navigator)||wakeLockPending||wakeLock)return;
+ wakeLockPending=true;
+ try{
+  const lock=await navigator.wakeLock.request('screen');
+  if(document.visibilityState!=='visible'){await lock.release();return;}
+  wakeLock=lock;
+  lock.addEventListener('release',()=>{
+   if(wakeLock===lock)wakeLock=null;
+  },{once:true});
+ }catch(e){console.log('Wake Lock non disponibile:',e)}
+ finally{wakeLockPending=false}
 }
-async function allowScreenSleep(){try{if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')keepScreenAwake();});
+async function allowScreenSleep(){
+ const lock=wakeLock;wakeLock=null;
+ if(lock)try{await lock.release()}catch(e){}
+}
+// In iOS la richiesta può richiedere un'interazione reale: riprova
+// al primo tocco e quando l'app torna in primo piano.
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')keepScreenAwake()});
+window.addEventListener('pageshow',keepScreenAwake);
+window.addEventListener('focus',keepScreenAwake);
+document.addEventListener('touchstart',keepScreenAwake,{passive:true});
+document.addEventListener('pointerdown',keepScreenAwake,{passive:true});
 function save(){localStorage.setItem('mil_state',JSON.stringify(state))}function exKey(w,d,e){return`W${w}-D${d}-E${e}`}function sessionKey(w,d){return`W${w}-D${d}`}function fmt(s){return`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`}function fmtLong(s){const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;return h?`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`}function startSessionTimer(){if(sessionStartedAt)return;sessionStartedAt=Date.now()-sessionElapsed*1000;const box=document.getElementById('sessionTimer'),st=document.getElementById('sessionState');box?.classList.add('running');if(st)st.textContent='IN CORSO';updateSessionTimer();sessionTicker=setInterval(updateSessionTimer,1000)}function updateSessionTimer(){if(sessionStartedAt)sessionElapsed=Math.floor((Date.now()-sessionStartedAt)/1000);const el=document.getElementById('sessionTime');if(el)el.textContent=fmtLong(sessionElapsed)}function stopSessionTimer(){if(sessionTicker){clearInterval(sessionTicker);sessionTicker=null}if(sessionStartedAt)sessionElapsed=Math.floor((Date.now()-sessionStartedAt)/1000);sessionStartedAt=null;updateSessionTimer();const box=document.getElementById('sessionTimer'),st=document.getElementById('sessionState');box?.classList.remove('running');if(st)st.textContent='COMPLETATO';return sessionElapsed}function resetSessionTimer(){if(sessionTicker)clearInterval(sessionTicker);sessionTicker=null;sessionStartedAt=null;sessionElapsed=0;updateSessionTimer();document.getElementById('sessionTimer')?.classList.remove('running');const st=document.getElementById('sessionState');if(st)st.textContent='PARTE CON IL RISCALDAMENTO'}
 function toggleWarmup(){document.getElementById('warmup').classList.toggle('open')}
 function renderWarmup(){document.getElementById('warmGrid').innerHTML=warmup.map((x,i)=>`<div class="warm-item"><b>${x.name} · ${x.qty}</b><div class="desc">${x.desc}</div><div class="timer"><div class="timer-label">TIMER ESERCIZIO</div><div class="countdown" id="wcd${i}">${fmt(x.sec)}</div><div class="timer-actions"><button class="btn primary" id="wbtn${i}" onclick="startWarmupTimer('w${i}',${x.sec},'wcd${i}','wbtn${i}')">AVVIA</button></div></div></div>`).join('')}
@@ -141,6 +159,5 @@ renderWarmup();render();
 
 // Mantieni lo schermo acceso finché l'app è visibile, indipendentemente dal timer.
 keepScreenAwake();
-document.addEventListener('pointerdown',keepScreenAwake,{passive:true});
 </script>
 </body></html>
