@@ -111,7 +111,15 @@ if(!s.week17Confirmed){for(let d=0;d<3;d++)s.doneSessions[`W17-D${d}`]=true;s.we
 // Allineamento una tantum: lunedì 12/10/2026 inizia la settimana 18 (giorno A).
 // Non modifica né elimina le registrazioni precedenti.
 if(!s.week18DateAligned && new Date() >= new Date(2026,9,12) && s.currentWeek<=18){s.currentWeek=18;s.currentDay=0;s.week18DateAligned=true;localStorage.setItem('mil_state',JSON.stringify(s));}
-if(!s.week20SkiAligned){s.week19Rest=true;if(s.currentWeek===18||s.currentWeek===19){s.currentWeek=20;s.currentDay=0;}s.week20SkiAligned=true;localStorage.setItem('mil_state',JSON.stringify(s));}return s}}catch(e){}const f=fresh();if(new Date()>=new Date(2026,9,12)){f.currentWeek=20;f.currentDay=0;f.week18DateAligned=true;}return f}
+// La settimana 20 parte lunedi 9 novembre 2026, mai in anticipo.
+const skiStart=new Date(2026,10,9);
+if(new Date()>=skiStart){
+ if(!s.week20SkiAligned){s.week19Rest=true;if(s.currentWeek===18||s.currentWeek===19){s.currentWeek=20;s.currentDay=0;}s.week20SkiAligned=true;localStorage.setItem('mil_state',JSON.stringify(s));}
+}else if(s.week20SkiAligned && s.currentWeek===20 && !Object.keys(s.doneSessions).some(k=>k.startsWith('W20-')&&s.doneSessions[k])){
+ // Corregge l'avanzamento prematuro pubblicato in precedenza senza cancellare lo storico.
+ s.currentWeek=19;s.currentDay=0;s.week20SkiAligned=false;s.week19Rest=true;localStorage.setItem('mil_state',JSON.stringify(s));
+}
+return s}}catch(e){}const f=fresh();if(new Date()>=new Date(2026,9,12)){f.currentWeek=new Date()>=new Date(2026,10,9)?20:19;f.currentDay=0;f.week18DateAligned=true;f.week20SkiAligned=f.currentWeek===20;}return f}
 let state=load(),timers={},openCards={},sessionStartedAt=null,sessionTicker=null,sessionElapsed=0;
 /* Mantiene lo schermo acceso durante la sessione, quando supportato */
 let wakeLock=null;
