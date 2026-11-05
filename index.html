@@ -105,24 +105,34 @@ skiProgram[2].exercises[3]={name:'Squat a tempo',sets:2,reps:'12',rest:60,desc:'
 function programForWeek(w){if(w>=20){const p=JSON.parse(JSON.stringify(skiProgram));const wall=p[0].exercises[2],sec=w===20?30:w===21?40:w===22?45:60;wall.reps=sec+' sec';wall.timed=sec;return p}return w>=18?phase18Program:w>=13?newProgram:legacyProgram} 
 function buildP1Done(){const d={};for(let w=1;w<=8;w++)for(let x=0;x<3;x++)d[`W${w}-D${x}`]=true;return d}
 function buildKnownProgress(){const d=buildP1Done();for(let w=9;w<=11;w++)for(let x=0;x<3;x++)d[`W${w}-D${x}`]=true;d['W12-D0']=true;d['W12-D1']=true;return d}
-function fresh(){const done=buildKnownProgress();for(let d=0;d<3;d++)done[`W17-D${d}`]=true;return{version:4,currentWeek:19,currentDay:0,completedSessions:Math.max(35,Object.values(done).filter(Boolean).length),doneSessions:done,setsDone:{},hybridLog:{},levels:{},sessionDurations:{},week17Confirmed:true,week18DateAligned:true,week20SkiAligned:false,week19Rest:true,skiCalendarFixedV2:true}}
+function fresh(){const done=buildKnownProgress();for(let d=0;d<3;d++)done[`W17-D${d}`]=true;return{version:4,currentWeek:19,currentDay:1,completedSessions:Math.max(35,Object.values(done).filter(Boolean).length),doneSessions:done,setsDone:{},hybridLog:{},levels:{},sessionDurations:{},week17Confirmed:true,week18DateAligned:true,week20SkiAligned:false,week19Rest:false,skiCalendarFixedV2:true,skiCalendarFixedV3:true}}
 function load(){try{const s=JSON.parse(localStorage.getItem('mil_state')||'null');if(s){s.version=4;s.setsDone=s.setsDone||{};s.doneSessions=s.doneSessions||buildKnownProgress();s.hybridLog=s.hybridLog||{};s.levels=s.levels||{};s.sessionDurations=s.sessionDurations||{};if(typeof s.currentWeek!=='number')s.currentWeek=12;if(typeof s.currentDay!=='number')s.currentDay=2;const counted=Object.values(s.doneSessions).filter(Boolean).length;s.completedSessions=Math.max(typeof s.completedSessions==='number'?s.completedSessions:35,counted);// Settimana 17 (5-9 ottobre) confermata completa: A, B e C. Migrazione una tantum, preserva i dettagli esistenti.
 if(!s.week17Confirmed){for(let d=0;d<3;d++)s.doneSessions[`W17-D${d}`]=true;s.week17Confirmed=true;s.completedSessions=Math.max(s.completedSessions,Object.values(s.doneSessions).filter(Boolean).length);localStorage.setItem('mil_state',JSON.stringify(s));}
 // Allineamento una tantum: lunedì 12/10/2026 inizia la settimana 18 (giorno A).
 // Non modifica né elimina le registrazioni precedenti.
 if(!s.week18DateAligned && new Date() >= new Date(2026,9,12) && s.currentWeek<=18){s.currentWeek=18;s.currentDay=0;s.week18DateAligned=true;localStorage.setItem('mil_state',JSON.stringify(s));}
-// Calendario vincolante: settimana 19 in pausa fino all'8/11; settimana 20 dal 9/11; 21 dal 16/11.
+// Correzione calendario 05/11/2026: settimana 19, solo giorno A completato.
+// Migrazione conservativa: archivia i dati etichettati per errore come settimane future.
 const today=new Date(),start20=new Date(2026,10,9),start21=new Date(2026,10,16);
-if(!s.skiCalendarFixedV2){
- // Conserva una copia dei dati originari prima di correggere le settimane
- // erroneamente contrassegnate complete dalla precedente versione.
- s.skiCalendarRecovery={currentWeek:s.currentWeek,currentDay:s.currentDay,completedSessions:s.completedSessions,done19and20:{}};
- let removed=0;
- for(let w=19;w<=20;w++)for(let d=0;d<3;d++){const k='W'+w+'-D'+d;if(s.doneSessions[k]){s.skiCalendarRecovery.done19and20[k]=true;delete s.doneSessions[k];removed++;}}
- s.completedSessions=Math.max(0,s.completedSessions-removed);
- s.week19Rest=true;s.skiCalendarFixedV2=true;
+if(!s.skiCalendarFixedV3){
+ s.skiCalendarRecoveryV3={currentWeek:s.currentWeek,currentDay:s.currentDay,completedSessions:s.completedSessions,doneSessions:{},setsDone:{},hybridLog:{},sessionDurations:{}};
+ const archive=(obj,archiveObj,key)=>{if(Object.prototype.hasOwnProperty.call(obj,key)){archiveObj[key]=obj[key];delete obj[key];}};
+ for(const key of Object.keys(s.doneSessions)){
+  const m=/^W(\d+)-D(\d+)$/.exec(key);
+  if(m && (+m[1]>=20 || (+m[1]===19 && +m[2]!==0)))archive(s.doneSessions,s.skiCalendarRecoveryV3.doneSessions,key);
+ }
+ for(const field of ['setsDone','hybridLog','sessionDurations']){
+  for(const key of Object.keys(s[field])){
+   const m=/^W(\d+)-D(\d+)/.exec(key);
+   if(m && (+m[1]>=20 || (+m[1]===19 && +m[2]!==0)))archive(s[field],s.skiCalendarRecoveryV3[field],key);
+  }
+ }
+ // Il lunedi della settimana 19 e' stato svolto; gli altri due giorni no.
+ s.doneSessions['W19-D0']=true;
+ s.completedSessions=Object.values(s.doneSessions).filter(Boolean).length;
+ s.week19Rest=false;s.skiCalendarFixedV3=true;
 }
-if(today<start20){s.currentWeek=19;s.currentDay=0;s.week20SkiAligned=false;}
+if(today<start20){s.currentWeek=19;s.currentDay=1;s.week20SkiAligned=false;}
 else if(today<start21){s.currentWeek=20;s.week20SkiAligned=true;}
 else if(s.currentWeek<21){s.currentWeek=21;s.week20SkiAligned=true;}
 localStorage.setItem('mil_state',JSON.stringify(s));
